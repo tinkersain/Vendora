@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="../mermaid.min.js"></script>
+<style>
+    * {
+        box-sizing: border-box;
+    }
+    body {
+        margin: 0;
+        padding: 20px;
+        background-color: #ffffff;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        overflow: hidden;
+    }
+    #container {
+        width: 100%;
+        max-width: 1560px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    #container svg {
+        width: 100% !important;
+        height: auto !important;
+        max-height: 720px;
+    }
+    /* Polish SVG styling */
+    .node rect, .node circle, .node ellipse, .node polygon, .node path {
+        fill: #f0f9ff !important;
+        stroke: #0284c7 !important;
+        stroke-width: 1.5px !important;
+    }
+    .classTitle, .node .label {
+        font-family: 'Segoe UI', Arial, sans-serif !important;
+        font-weight: 600 !important;
+        fill: #0f172a !important;
+    }
+</style>
+</head>
+<body>
+<div id="container"></div>
+
+<script>
+    mermaid.initialize({
+        startOnLoad: false,
+        theme: 'base',
+        themeVariables: {
+            fontFamily: 'Segoe UI, Arial, sans-serif',
+            fontSize: '15px',
+            primaryColor: '#f0f9ff',
+            primaryBorderColor: '#0284c7',
+            primaryTextColor: '#0f172a',
+            lineColor: '#334155',
+            secondaryColor: '#f8fafc',
+            tertiaryColor: '#ffffff'
+        }
+    });
+
+    const graphDefinition = `classDiagram
+    direction LR
+    TicketController --> TicketService : invokes
+    TicketService <|.. TicketServiceImpl : implements
+    TicketServiceImpl --> TicketRepository : persists
+    TicketRepository --> Ticket : manages
+    TicketController ..> TicketResponse : returns
+
+    class TicketController {
+        -TicketService ticketService
+        +createTicket(request)
+        +getAllTickets(status)
+        +updateStatus(id)
+    }
+
+    class TicketService {
+        +createTicket(dto)
+        +getAllTickets(filter)
+        +updateStatus(id)
+    }
+    <<interface>> TicketService
+
+    class TicketServiceImpl {
+        -TicketRepository ticketRepo
+        +createTicket(dto)
+        +updateStatus(id)
+    }
+
+    class TicketRepository {
+        +findByUserId(userId)
+        +findByStatus(status)
+    }
+    <<interface>> TicketRepository
+
+    class Ticket {
+        +Long id
+        +String ticketNumber
+        +Long userId
+        +Category category
+        +Priority priority
+        +Status status
+    }
+
+    class TicketResponse {
+        +Long id
+        +String ticketNumber
+        +Category category
+        +Status status
+    }`;
+
+    mermaid.render('classSvg', graphDefinition, function(svgCode) {
+        document.getElementById('container').innerHTML = svgCode;
+    });
+</script>
+</body>
+</html>

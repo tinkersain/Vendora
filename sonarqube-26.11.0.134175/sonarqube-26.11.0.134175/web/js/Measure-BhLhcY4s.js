@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{a as e}from"./rolldown-runtime-LzpV0vpq.js";import{C as t}from"./vendor-BinpZ4gA.js";import{t as n}from"./Measure-DDurDxfr.js";var r=e(t());function i(e){return(0,r.jsx)(n,{...e,"data-component":`measure`})}export{i as t};

@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{p as e}from"./common-BX1tfZCq.js";import{m as t}from"./GlobalFooter-C95yCYfy.js";function n(n){return e({queryKey:[`identity_provider`,`users_and_groups_provider`],queryFn:async()=>({provider:(await t()).System[`External Users and Groups Provisioning`]}),...n})}function r(n){return e({queryKey:[`system_info`],queryFn:t,...n})}function i(){let{data:e}=r();return{loc:e?.System[`Lines of Code`]}}export{i as n,n as t};

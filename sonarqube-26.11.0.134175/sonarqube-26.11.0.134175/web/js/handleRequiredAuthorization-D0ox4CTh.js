@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{L as e}from"./request-iI6TN18u.js";function t(){let t=window.location.pathname+window.location.search+window.location.hash,n=new URLSearchParams({return_to:t,authorizationError:`true`});window.location.replace(`${e()}/sessions/new?${n.toString()}`)}export{t};

@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{f as e,i as t}from"./common-BX1tfZCq.js";import{i as n,l as r}from"./ce-prMEIDrz.js";var i=t(t=>e({queryKey:[`ce`,`activity`,t],queryFn:()=>n(t).then(({tasks:e})=>e.length>0?e[0]:null)})),a=t(t=>e({queryKey:[`ce`,`component`,t],queryFn:()=>r(t)}));export{i as n,a as t};

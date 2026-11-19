@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{a as e}from"./rolldown-runtime-LzpV0vpq.js";import{Ht as t,X as n}from"./echoes-DapxbwKS.js";import{C as r}from"./vendor-BinpZ4gA.js";import{n as i}from"./docs-Dn5IBOr2.js";var a=e(r());function o({to:e,innerRef:r,standalone:o=!1,...s}){let c=i(e);return o?(0,a.jsx)(t,{ref:r,to:c,...s}):(0,a.jsx)(n,{ref:r,to:c,...s})}export{o as t};

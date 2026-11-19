@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{a as e}from"./rolldown-runtime-LzpV0vpq.js";import{t}from"./error-BSkW5sKm.js";import{M as n}from"./request-iI6TN18u.js";import{t as r}from"./lodash-CwL9oH6p.js";import{f as i,i as a,t as o}from"./common-BX1tfZCq.js";var s=e(r());function c(){return n(`/api/languages/list`).then(e=>e.languages,t)}var l=a(()=>i({queryKey:[`languages`],queryFn:async()=>{let e=await c();return(0,s.keyBy)(e,`key`)},staleTime:o.NEVER}));export{l as t};

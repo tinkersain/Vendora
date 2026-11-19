@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="../mermaid.min.js"></script>
+<script>
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'base',
+        themeVariables: {
+            fontFamily: 'Segoe UI, Arial, sans-serif',
+            fontSize: '18px',
+            primaryColor: '#e0f2fe',
+            primaryBorderColor: '#0284c7',
+            primaryTextColor: '#0f172a',
+            lineColor: '#334155',
+            secondaryColor: '#f1f5f9',
+            tertiaryColor: '#f8fafc',
+            edgeLabelBackground: '#ffffff'
+        },
+        flowchart: { useMaxWidth: true, htmlLabels: true },
+        sequence: { useMaxWidth: true, showSequenceNumbers: true, actorFontSize: '16px', messageFontSize: '15px' },
+        er: { useMaxWidth: true, fontSize: '15px' }
+    });
+</script>
+<style>
+    body {
+        background: white;
+        margin: 0;
+        padding: 30px;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 60px);
+    }
+    .mermaid { width: 95%; max-width: 1400px; }
+    svg { width: 100% !important; height: auto !important; }
+</style>
+</head>
+<body>
+    <div class="mermaid">
+flowchart TD
+    Req["POST /api/payments/process<br/>{ idempotencyKey: 'PAY-UUID-8899', amount: 450.00, refId: 5 }"] --> Check{"Key exists in<br/>payments table?"}
+    Check -- Yes --> ReturnExist["Return Existing Record<br/>(HTTP 200 OK, No duplicate debit)"]
+    Check -- No --> Validate["Validate Amount (> 0) & Reference Exists"]
+    Validate --> Execute["Process Simulated Transaction"]
+    Execute --> Save["Persist new Payment with Status: COMPLETED"]
+    Save --> ReturnNew["Return New Record (HTTP 201 Created)"]
+    </div>
+</body>
+</html>

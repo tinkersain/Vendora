@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="../mermaid.min.js"></script>
+<script>
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'base',
+        themeVariables: {
+            fontFamily: 'Segoe UI, Arial, sans-serif',
+            fontSize: '18px',
+            primaryColor: '#e0f2fe',
+            primaryBorderColor: '#0284c7',
+            primaryTextColor: '#0f172a',
+            lineColor: '#334155',
+            secondaryColor: '#f1f5f9',
+            tertiaryColor: '#f8fafc',
+            edgeLabelBackground: '#ffffff'
+        },
+        flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis' },
+        sequence: { useMaxWidth: true, showSequenceNumbers: true, actorFontSize: '16px', messageFontSize: '15px' },
+        er: { useMaxWidth: true, fontSize: '15px' }
+    });
+</script>
+<style>
+    body {
+        background: white;
+        margin: 0;
+        padding: 30px;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 60px);
+    }
+    .mermaid { width: 95%; max-width: 1600px; }
+    svg { width: 100% !important; height: auto !important; }
+</style>
+</head>
+<body>
+    <div class="mermaid">
+flowchart TD
+    Client["Client Devices / Postman / Swagger UI"] -->|HTTP REST Requests| Gateway["Spring Cloud API Gateway (:8080)<br/>• Zero-Trust Perimeter Filter<br/>• JWT HMAC-SHA256 Validation<br/>• Client Header Stripping & Claim Injection"]
+    Gateway <-->|Dynamic Discovery & Heartbeats| Eureka["Netflix Eureka Server (:8761)<br/>• In-Memory Microservice Registry"]
+    Gateway -->|Proxied Route| Auth["vendora-auth-service (:8082)<br/>Stateless JWT Minting"]
+    Gateway -->|Proxied Route| User["vendora-user-service (:8081)<br/>User Profiles & Role Governance"]
+    Gateway -->|Proxied Route| Market["vendora-marketplace-service (:8083)<br/>P2P Listings, Offers & Chat"]
+    Gateway -->|Proxied Route| Helpdesk["vendora-helpdesk-service (:8084)<br/>Maintenance Ticket Lifecycle"]
+    Gateway -->|Proxied Route| Scrap["vendora-scrap-service (:8085)<br/>Hostel Scrap Pickups & Giveaways"]
+    Gateway -->|Proxied Route| Payment["vendora-payment-service (:8086)<br/>Transaction Idempotency Engine"]
+    Auth -.->|Secured Internal REST: X-Internal-Secret| User
+    User & Market & Helpdesk & Scrap & Payment -->|Spring Data JPA / HikariCP| DB[("MySQL 8.0: vendora_db<br/>• Pragmatic Shared Schema<br/>• Strict Logical Domain Isolation<br/>• Zero Cross-Domain Foreign Keys")]
+    </div>
+</body>
+</html>

@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{u as e}from"./doc-links-Bzb1j9cf.js";import{l as t}from"./constants-CukQEjqz.js";var n={[e.Azure]:e=>!!e.url,[e.BitbucketCloud]:()=>!0,[e.BitbucketServer]:()=>!0,[e.GitHub]:()=>!0,[e.GitLab]:e=>!!e.url};function r(e){return t.filter(t=>{let r=e.filter(e=>e.alm===t);return r.length>0&&n[t](r[0])})}export{r as t};

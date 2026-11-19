@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{a as e}from"./rolldown-runtime-LzpV0vpq.js";import{Tn as t,or as n,qt as r}from"./echoes-DapxbwKS.js";import{C as i,w as a}from"./vendor-BinpZ4gA.js";var o=e(a());function s({children:e,date:t}){let n=new Date(t).getTime();return Number.isNaN(n)||Date.now()>n?null:e}var c=e(i()),l=(0,o.forwardRef)((e,i)=>{let{expirationDate:a,...o}=e;return(0,c.jsx)(s,{date:a,children:(0,c.jsx)(t,{variety:r.Highlight,...o,ref:i,children:(0,c.jsx)(n,{id:`new`})})})});l.displayName=`NewBadge`;export{l as t};

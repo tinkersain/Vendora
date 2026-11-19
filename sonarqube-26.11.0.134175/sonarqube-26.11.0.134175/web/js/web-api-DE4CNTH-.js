@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{p as e}from"./common-BX1tfZCq.js";import{r as t,t as n}from"./web-api-3upYSwy4.js";function r(){return e({queryKey:[`web-api`],queryFn:()=>t(!1)})}var i=()=>e({queryKey:[`open_api`],queryFn:n,staleTime:1/0,gcTime:1/0});export{r as n,i as t};

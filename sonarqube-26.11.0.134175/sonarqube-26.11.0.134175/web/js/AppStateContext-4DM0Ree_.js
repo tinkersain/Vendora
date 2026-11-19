@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{a as e}from"./rolldown-runtime-LzpV0vpq.js";import{w as t}from"./vendor-BinpZ4gA.js";import{a as n}from"./doc-links-Bzb1j9cf.js";var r=e(t()),i={authenticationError:!1,authorizationError:!1,edition:void 0,productionDatabase:!0,qualifiers:[],settings:{},version:``,versionEOL:``,documentationUrl:n},a=r.createContext(i);export{i as n,a as t};

@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+var e=function(e){return e.Application=`APP`,e.Directory=`DIR`,e.Developer=`DEV`,e.File=`FIL`,e.Portfolio=`VW`,e.Project=`TRK`,e.SubPortfolio=`SVW`,e.SubProject=`BRC`,e.TestFile=`UTS`,e}({}),t=function(e){return e.Public=`public`,e.Private=`private`,e}({});export{t as n,e as t};

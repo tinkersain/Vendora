@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+var e=`Sonar way comprehensive`,t=`Sonar agentic AI`,n={[t]:`quality_profiles.sonar_agentic_ai.help_text`,[e]:`quality_profiles.sonar_way.help_text`},r=e=>{if(e.isBuiltIn)return n[e.name]};export{e as n,r,t};

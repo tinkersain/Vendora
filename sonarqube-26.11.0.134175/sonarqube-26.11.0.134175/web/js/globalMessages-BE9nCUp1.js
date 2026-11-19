@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{Ct as e}from"./echoes-DapxbwKS.js";import{c as t}from"./request-iI6TN18u.js";function n(n){return n instanceof Response?t(n).then(t=>{e.error({description:t,duration:`short`})},()=>{}):typeof n==`string`?Promise.resolve(n).then(t=>{e.error({description:t,duration:`short`})}):Promise.resolve()}export{n as t};

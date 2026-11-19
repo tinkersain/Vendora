@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="../mermaid.min.js"></script>
+<script>
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'base',
+        themeVariables: {
+            fontFamily: 'Segoe UI, Arial, sans-serif',
+            fontSize: '18px',
+            primaryColor: '#e0f2fe',
+            primaryBorderColor: '#0284c7',
+            primaryTextColor: '#0f172a',
+            lineColor: '#334155',
+            secondaryColor: '#f1f5f9',
+            tertiaryColor: '#f8fafc',
+            edgeLabelBackground: '#ffffff'
+        },
+        flowchart: { useMaxWidth: true, htmlLabels: true },
+        sequence: { useMaxWidth: true, showSequenceNumbers: true, actorFontSize: '16px', messageFontSize: '15px' },
+        er: { useMaxWidth: true, fontSize: '15px' }
+    });
+</script>
+<style>
+    body {
+        background: white;
+        margin: 0;
+        padding: 30px;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 60px);
+    }
+    .mermaid { width: 95%; max-width: 1500px; }
+    svg { width: 100% !important; height: auto !important; }
+</style>
+</head>
+<body>
+    <div class="mermaid">
+erDiagram
+    USERS ||--o| APP_REPRESENTATIVES : "1:1 profile"
+    USERS {
+        bigint id PK
+        varchar full_name
+        varchar email UK
+        varchar role
+    }
+    LISTINGS ||--o{ MARKETPLACE_REQUESTS : "receives"
+    LISTINGS ||--o{ CONVERSATIONS : "initiates"
+    CONVERSATIONS ||--o{ MESSAGES : "contains"
+    LISTINGS {
+        bigint id PK
+        bigint seller_id "Scalar User ID"
+        varchar title
+        decimal price
+        varchar status
+    }
+    SCRAP_REQUESTS {
+        bigint id PK
+        bigint user_id "Scalar User ID"
+        varchar material_type
+        decimal estimated_quantity_kg
+        varchar status
+    }
+    GIVEAWAYS ||--o{ GIVEAWAY_INTERESTS : "receives"
+    GIVEAWAYS {
+        bigint id PK
+        bigint owner_id "Scalar User ID"
+        varchar title
+        varchar status
+    }
+    TICKETS ||--o{ TICKET_COMMENTS : "contains"
+    TICKETS {
+        bigint id PK
+        varchar ticket_number UK
+        bigint user_id "Scalar User ID"
+        varchar category
+        varchar status
+    }
+    PAYMENTS {
+        bigint id PK
+        bigint user_id "Scalar User ID"
+        decimal amount
+        varchar status
+        varchar idempotency_key UK
+    }
+    </div>
+</body>
+</html>

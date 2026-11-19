@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{r as e}from"./issues-BfIz-JdT.js";var t=`hunter-agent`,n=`external_`;function r(t){return t!==e.WontFix&&t!==e.Resolve}function i(t){return[e.Accept,e.FalsePositive].includes(t)}function a(t){let n=Object.values(e);return t.sort((e,t)=>n.indexOf(e)-n.indexOf(t))}function o(e){return e?.toLowerCase()===t}function s(e){return e.startsWith(n)?e.slice(9):e}function c(e){return s(e).toLowerCase().startsWith(`${t}:`)}export{a,r as i,o as n,i as o,c as r,s as t};

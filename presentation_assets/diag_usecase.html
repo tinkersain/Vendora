@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="../mermaid.min.js"></script>
+<script>
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'base',
+        themeVariables: {
+            fontFamily: 'Segoe UI, Arial, sans-serif',
+            fontSize: '18px',
+            primaryColor: '#e0f2fe',
+            primaryBorderColor: '#0284c7',
+            primaryTextColor: '#0f172a',
+            lineColor: '#334155',
+            secondaryColor: '#f1f5f9',
+            tertiaryColor: '#f8fafc',
+            edgeLabelBackground: '#ffffff'
+        },
+        flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis' },
+        sequence: { useMaxWidth: true, showSequenceNumbers: true, actorFontSize: '16px', messageFontSize: '15px' },
+        er: { useMaxWidth: true, fontSize: '15px' }
+    });
+</script>
+<style>
+    body {
+        background: white;
+        margin: 0;
+        padding: 30px;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 60px);
+    }
+    .mermaid { width: 95%; max-width: 1500px; }
+    svg { width: 100% !important; height: auto !important; }
+</style>
+</head>
+<body>
+    <div class="mermaid">
+flowchart LR
+    subgraph Actors["Campus Actors"]
+        Student["Student"]
+        Faculty["Faculty"]
+        StaffM["Maintenance Staff"]
+        StaffC["Collection Staff"]
+        Admin["Administrator"]
+    end
+
+    subgraph CoreUseCases["Vendora Functional Use Cases"]
+        UC1["Register & Authenticate (JWT)"]
+        UC2["Browse & Create Marketplace Listings"]
+        UC3["Submit Purchase Offer & In-App Chat"]
+        UC4["Schedule Hostel Scrap Collection"]
+        UC5["Post & Claim Free Giveaways"]
+        UC6["Raise Facility Maintenance Ticket"]
+        UC7["Add Comments to Ticket Discussion"]
+        UC8["Assign Technician to Maintenance Ticket"]
+        UC9["Transition Ticket Status (In Progress/Resolved)"]
+        UC10["Assign Collection Staff to Scrap Pickup"]
+        UC11["Execute Idempotent Payment"]
+        UC12["Approve Representative Role"]
+    end
+
+    Student --> UC1 & UC2 & UC3 & UC4 & UC5 & UC6 & UC7 & UC11
+    Faculty --> UC1 & UC2 & UC6 & UC7 & UC11
+    StaffM --> UC1 & UC7 & UC9
+    StaffC --> UC1 & UC4
+    Admin --> UC1 & UC8 & UC9 & UC10 & UC12
+    </div>
+</body>
+</html>

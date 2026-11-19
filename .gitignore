@@ -1,0 +1,184 @@
+# ==========================================
+# JAVA
+# ==========================================
+*.class
+*.log
+*.ctxt
+*.jar
+*.war
+*.ear
+*.nar
+hs_err_pid*
+replay_pid*
+.metadata/
+
+# ==========================================
+# MAVEN
+# ==========================================
+target/
+.mvn/timing.properties
+dependency-reduced-pom.xml
+.flattened-pom.xml
+
+# Keep Maven wrapper
+!.mvn/wrapper/maven-wrapper.properties
+
+# ==========================================
+# GRADLE
+# ==========================================
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+gradle-app.setting
+.gradletasknamecache
+
+# ==========================================
+# SPRING BOOT
+# ==========================================
+.springBeans
+.sts4-cache/
+bin/
+!src/main/java/
+!src/main/resources/
+!src/test/java/
+!src/test/resources/
+
+# ==========================================
+# IDE FILES
+# ==========================================
+.idea/
+*.iml
+*.iws
+*.ipr
+.classpath
+.project
+.settings/
+.factorypath
+.vscode/
+.nb-gradle/
+nbproject/private/
+
+# ==========================================
+# NODE / FRONTEND (IF PRESENT)
+# ==========================================
+node_modules/
+.npm/
+.pnpm-store/
+dist/
+build/
+.next/
+.nuxt/
+.parcel-cache/
+coverage/
+
+# ==========================================
+# ENVIRONMENT & SECRETS
+# ==========================================
+.env
+.env.*
+!.env.example
+!.env.sample
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+secrets/
+credentials/
+
+# ==========================================
+# LOCAL CONFIGURATION
+# ==========================================
+application-local.properties
+application-dev.properties
+application-prod.properties
+application-local.yml
+application-dev.yml
+application-prod.yml
+*.local
+*.local.properties
+*.local.yml
+*.local.yaml
+
+# ==========================================
+# DATABASE FILES
+# ==========================================
+*.db
+*.sqlite
+*.sqlite3
+*.mv.db
+*.trace.db
+*.bak
+*.dump
+
+# ==========================================
+# LOGS / TEMP FILES
+# ==========================================
+logs/
+tmp/
+temp/
+*.tmp
+*.swp
+*.swo
+*~
+
+# ==========================================
+# TEST / COVERAGE
+# ==========================================
+surefire-reports/
+failsafe-reports/
+test-results/
+jacoco/
+*.exec
+
+# ==========================================
+# DOCKER
+# ==========================================
+.docker/
+docker-compose.override.yml
+
+# ==========================================
+# OS FILES
+# ==========================================
+.DS_Store
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.AppleDouble
+.LSOverride
+
+# ==========================================
+# GENERATED FILES
+# ==========================================
+generated/
+generated-sources/
+generated-test-sources/
+annotation-processing/
+
+# ==========================================
+# MISC
+# ==========================================
+*.orig
+*.rej
+*.pid
+*.seed
+
+# ==========================================
+# SONARQUBE / SONAR SCANNER
+# ==========================================
+.scannerwork/
+.sonar/
+.sonarcloud.properties
+sonar-report.json
+sonar-report.html
+.scanner*
+
+# SonarQube generated reports
+target/sonar/
+target/sonar/
+
+*.zip
+
+sonarqube-26.11.0.134175/

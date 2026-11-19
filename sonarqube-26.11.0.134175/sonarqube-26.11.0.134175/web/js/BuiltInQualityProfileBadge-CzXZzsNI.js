@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{a as e}from"./rolldown-runtime-LzpV0vpq.js";import{Tn as t,mt as n,or as r}from"./echoes-DapxbwKS.js";import{C as i}from"./vendor-BinpZ4gA.js";var a=e(i());function o({className:e,tooltip:i=!0}){let o=(0,a.jsx)(t,{className:e,isInteractive:i,variety:`neutral`,children:(0,a.jsx)(r,{id:`quality_profiles.built_in`})});return i?(0,a.jsx)(n,{description:(0,a.jsx)(r,{id:`quality_profiles.built_in.description`}),children:o}):o}export{o as t};

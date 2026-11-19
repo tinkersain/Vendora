@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="../mermaid.min.js"></script>
+<script>
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'base',
+        themeVariables: {
+            fontFamily: 'Segoe UI, Arial, sans-serif',
+            fontSize: '18px',
+            primaryColor: '#e0f2fe',
+            primaryBorderColor: '#0284c7',
+            primaryTextColor: '#0f172a',
+            lineColor: '#334155',
+            secondaryColor: '#f1f5f9',
+            tertiaryColor: '#f8fafc',
+            edgeLabelBackground: '#ffffff'
+        },
+        flowchart: { useMaxWidth: true, htmlLabels: true },
+        sequence: { useMaxWidth: true, showSequenceNumbers: true, actorFontSize: '16px', messageFontSize: '15px' },
+        er: { useMaxWidth: true, fontSize: '15px' }
+    });
+</script>
+<style>
+    body {
+        background: white;
+        margin: 0;
+        padding: 30px;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 60px);
+    }
+    .mermaid { width: 95%; max-width: 1500px; }
+    svg { width: 100% !important; height: auto !important; }
+</style>
+</head>
+<body>
+    <div class="mermaid">
+sequenceDiagram
+    autonumber
+    actor Buyer as Student (Buyer)
+    actor Seller as Student (Seller)
+    participant GW as API Gateway (:8080)
+    participant Market as Marketplace (:8083)
+    participant Payment as Payment (:8086)
+    participant Helpdesk as Helpdesk (:8084)
+
+    Note over Buyer,Market: 1. Negotiation Flow
+    Buyer->>GW: POST /api/listings/5/requests {qty: 1, msg: "Buy cycle"}
+    GW->>Market: Forward request with X-User-Id: 2
+    Market-->>Buyer: 201 Created (MarketplaceRequest ID: 12)
+    Seller->>GW: PATCH /api/listings/requests/12/status {status: "ACCEPTED"}
+    GW->>Market: Forward update
+    Market-->>Seller: 200 OK (Status: ACCEPTED)
+
+    Note over Buyer,Payment: 2. Cashless Payment Flow
+    Buyer->>GW: POST /api/payments/process {refType: "MARKETPLACE", refId: 5, amount: 1500.00, key: "UUID-1"}
+    GW->>Payment: Forward payment
+    Payment-->>Buyer: 200 OK (Status: COMPLETED, Ref: TXN-9988)
+
+    Note over Buyer,Helpdesk: 3. Facilities Support Flow
+    Buyer->>GW: POST /api/helpdesk/tickets {title: "Cycle stand lock jammed", category: "OTHER"}
+    GW->>Helpdesk: Forward ticket creation
+    Helpdesk-->>Buyer: 201 Created (TicketNumber: HD-69440EDB, Status: OPEN)
+    </div>
+</body>
+</html>

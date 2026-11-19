@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="../mermaid.min.js"></script>
+<script>
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'base',
+        themeVariables: {
+            fontFamily: 'Segoe UI, Arial, sans-serif',
+            fontSize: '18px',
+            primaryColor: '#e0f2fe',
+            primaryBorderColor: '#0284c7',
+            primaryTextColor: '#0f172a',
+            lineColor: '#334155',
+            secondaryColor: '#f1f5f9',
+            tertiaryColor: '#f8fafc',
+            edgeLabelBackground: '#ffffff'
+        },
+        flowchart: { useMaxWidth: true, htmlLabels: true },
+        sequence: { useMaxWidth: true, showSequenceNumbers: true, actorFontSize: '16px', messageFontSize: '15px' },
+        er: { useMaxWidth: true, fontSize: '15px' }
+    });
+</script>
+<style>
+    body {
+        background: white;
+        margin: 0;
+        padding: 30px;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 60px);
+    }
+    .mermaid { width: 95%; max-width: 1500px; }
+    svg { width: 100% !important; height: auto !important; }
+</style>
+</head>
+<body>
+    <div class="mermaid">
+flowchart TD
+    subgraph Flow1["Workflow 1: Recyclable Scrap Collection"]
+        S1["Student creates Scrap Request<br/>(PAPER / PLASTIC / METAL, Weight kg, Hostel Room)"] --> S2["Status: OPEN"]
+        S2 --> S3["Admin assigns Collection Staff member"]
+        S3 --> S4["Status: ASSIGNED"]
+        S4 --> S5["Collector visits Hostel, weighs scrap & updates Status"]
+        S5 --> S6["Status: IN_PROGRESS --> COMPLETED"]
+    end
+
+    subgraph Flow2["Workflow 2: Zero-Cost Campus Giveaways"]
+        G1["Senior posts Giveaway Item (Price: ₹0.00)"] --> G2["Status: AVAILABLE"]
+        G2 --> G3["Junior students express Interest with explanation message"]
+        G3 --> G4["Owner selects recipient & accepts interest"]
+        G4 --> G5["Status: CLAIMED (Giveaway Closed)"]
+    end
+    </div>
+</body>
+</html>

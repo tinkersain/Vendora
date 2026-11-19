@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{a as e}from"./rolldown-runtime-LzpV0vpq.js";import{w as t}from"./vendor-BinpZ4gA.js";import{r as n,t as r}from"./CurrentUserContext-BuDtFrm1.js";import{r as i}from"./users-BeqAPgSN.js";var a=e(t());function o(e){let{currentUser:t}=(0,a.useContext)(r);return t.dismissedNotices?.[e]??!1}function s(){let{mutateAsync:e}=i(),{updateDismissedNotices:t}=(0,a.useContext)(n);return{dismissNotice:(0,a.useCallback)(async n=>{await e(n),t(n,!0)},[e,t])}}export{o as n,s as t};

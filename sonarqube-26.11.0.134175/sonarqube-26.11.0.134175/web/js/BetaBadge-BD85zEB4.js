@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{a as e}from"./rolldown-runtime-LzpV0vpq.js";import{Tn as t,or as n,qt as r}from"./echoes-DapxbwKS.js";import{C as i,w as a}from"./vendor-BinpZ4gA.js";var o=e(a()),s=e(i()),c=(0,o.forwardRef)((e,i)=>(0,s.jsx)(t,{variety:r.Info,...e,ref:i,children:(0,s.jsx)(n,{id:`beta`})}));c.displayName=`BetaBadge`;export{c as t};

@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+var e=function(e){return e.Admin=`admin`,e.ArchitectureAdmin=`architectureadmin`,e.Browse=`user`,e.ProjectCreation=`provisioning`,e.ApplicationCreation=`applicationcreator`,e.PortfolioCreation=`portfoliocreator`,e.QualityGateAdmin=`gateadmin`,e.QualityProfileAdmin=`profileadmin`,e.Scan=`scan`,e.CodeViewer=`codeviewer`,e.IssueAdmin=`issueadmin`,e.SecurityHotspotAdmin=`securityhotspotadmin`,e}({});export{e as t};

@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{j as e}from"./request-iI6TN18u.js";import{t}from"./withAppStateContext-Cw378Peu.js";function n(){let{edition:n}=t();return n===e.enterprise||n===e.datacenter}export{n as t};

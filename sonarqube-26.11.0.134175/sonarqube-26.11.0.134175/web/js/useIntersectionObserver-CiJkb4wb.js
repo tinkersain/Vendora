@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{a as e}from"./rolldown-runtime-LzpV0vpq.js";import{w as t}from"./vendor-BinpZ4gA.js";import{N as n}from"./request-iI6TN18u.js";var r=e(t());function i(e,t={}){let{root:i=null,rootMargin:a=`0px`,threshold:o=0,freezeOnceVisible:s=!1}=t,[c,l]=(0,r.useState)(),u=(c?.isIntersecting||!1)&&s;return(0,r.useEffect)(()=>{if(!n(IntersectionObserver)||!n(e.current)||u)return;let t=new IntersectionObserver(([e])=>{l(e)},{root:i,rootMargin:a,threshold:o});return t.observe(e.current),()=>{t.disconnect()}},[e,u,i,a,o]),c}export{i as t};

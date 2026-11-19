@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{t as e}from"./error-BSkW5sKm.js";import{M as t,f as n,p as r}from"./request-iI6TN18u.js";function i(n){return t(`/api/project_links/search`,{projectKey:n}).then(e=>e.links,e)}function a(t){return n(`/api/project_links/delete`,{id:t}).catch(e)}function o(t){return r(`/api/project_links/create`,t).then(e=>e.link,e)}export{a as n,i as r,o as t};

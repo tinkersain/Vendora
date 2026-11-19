@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendora — Microservices Platform Final Presentation</title>
+    <script src="mermaid.min.js"></script>
+    <script>
+        window.addEventListener('load', function() {
+            mermaid.initialize({
+                startOnLoad: true,
+                theme: 'neutral',
+                securityLevel: 'loose',
+                flowchart: { useMaxWidth: true, htmlLabels: true },
+                sequence: { useMaxWidth: true, showSequenceNumbers: true },
+                er: { useMaxWidth: true }
+            });
+        });
+    </script>
+    <style>
+        :root {
+            --primary: #1e40af;
+            --primary-light: #3b82f6;
+            --accent: #0284c7;
+            --bg-dark: #0f172a;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #16a34a;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Progress Bar */
+        #progress-bar {
+            height: 5px;
+            background: linear-gradient(90deg, #3b82f6, #06b6d4, #10b981);
+            width: 0%;
+            transition: width 0.3s ease;
+            z-index: 100;
+        }
+
+        /* Slide Deck Container */
+        #deck {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 40px;
+        }
+
+        .slide {
+            position: absolute;
+            width: 92%;
+            max-width: 1300px;
+            height: 88vh;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+            padding: 40px 50px;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.96) translateY(20px);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1) translateY(0);
+            z-index: 10;
+        }
+
+        /* Slide Typography */
+        .slide-header {
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .slide-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .slide-subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .slide-badge {
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .slide-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .cols-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        /* Card Elements */
+        .info-card {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px 20px;
+        }
+
+        .info-card h4 {
+            color: #0369a1;
+            margin-bottom: 8px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-card ul {
+            padding-left: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #334155;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        th {
+            background: #f1f5f9;
+            color: #1e293b;
+            text-align: left;
+            padding: 8px 12px;
+            border: 1px solid #cbd5e1;
+            font-weight: 700;
+        }
+
+        td {
+            padding: 7px 12px;
+            border: 1px solid #e2e8f0;
+            color: #334155;
+        }
+
+        tr:nth-child(even) { background: #f8fafc; }
+
+        .status-pass {
+            background: #dcfce7;
+            color: #15803d;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        /* Mermaid Box */
+        .diagram-box {
+            background: #fcfcfc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: auto;
+        }
+
+        /* Speaker Notes Drawer */
+        .speaker-notes {
+            background: #fefce8;
+            border-left: 4px solid #ca8a04;
+            padding: 12px 18px;
+            border-radius: 0 8px 8px 0;
+            margin-top: auto;
+            font-size: 13.5px;
+            color: #854d0e;
+            line-height: 1.5;
+        }
+
+        .speaker-notes strong {
+            color: #713f12;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        /* Bottom Controls */
+        #controls {
+            height: 60px;
+            background: rgba(15, 23, 42, 0.95);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        button {
+            background: #1e293b;
+            color: #f8fafc;
+            border: 1px solid #334155;
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background: #334155;
+            color: #38bdf8;
+            border-color: #0284c7;
+        }
+
+        /* Title Slide Special */
+        .title-slide {
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at top right, #f8fafc, #ffffff);
+        }
+
+        .title-badge {
+            display: inline-block;
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .title-main {
+            font-size: 46px;
+            font-weight: 900;
+            color: #0f172a;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+        }
+
+        .title-sub {
+            font-size: 20px;
+            color: #475569;
+            max-width: 800px;
+            line-height: 1.5;
+            margin-bottom: 30px;
+        }
+
+        .tech-pill-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .tech-pill {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="progress-bar"></div>
+
+    <div id="deck">
+
+        <!-- SLIDE 1: TITLE SLIDE -->
+        <div class="slide title-slide active" data-slide="1">
+            <div class="title-badge">CAPSTONE PROJECT PRESENTATION &bull; MICROSERVICES PLATFORM</div>
+            <h1 class="title-main">VENDORA</h1>
+            <p class="title-sub">Your Campus. Your Community. One Platform.<br><span style="font-size:16px; color:#64748b;">Enterprise Microservices Platform for Campus Commerce, Recycling, and Facilities Management</span></p>
+            
+            <div class="tech-pill-group">
+                <span class="tech-pill">Java 17 LTS</span>
+                <span class="tech-pill">Spring Boot 3.x</span>
+                <span class="tech-pill">Spring Cloud Gateway</span>
+                <span class="tech-pill">Netflix Eureka</span>
+                <span class="tech-pill">Spring Security &amp; JWT</span>
+                <span class="tech-pill">MySQL 8.0</span>
+                <span class="tech-pill">SonarQube 26.11</span>
+                <span class="tech-pill">343 Passing Tests</span>
+            </div>
+
+            <div class="speaker-notes" style="max-width: 800px; text-align: left;">
+                <strong>Presenter Speech:</strong>
+                "Good morning respected evaluators. Today we are presenting Vendora, an enterprise-grade backend microservices ecosystem built specifically for university campuses. Rather than a generic e-commerce clone, Vendora integrates campus identity, peer-to-peer resource exchange, hostel waste recycling, facilities maintenance, and idempotent payment persistence across 8 independently deployable microservices with 100% passed SonarQube quality gates."
+            </div>
+        </div>
+
+        <!-- SLIDE 2: PROBLEM STATEMENT & REQUIREMENTS -->
+        <div class="slide" data-slide="2">
+            <div class="slide-header">
+                <div>
+                    <h2 class="slide-title">1. Requirement Understanding &amp; Problem Statement</h2>
+                    <p class="slide-subtitle">Operational challenges in traditional campuses vs. the Vendora unified solution</p>
+                </div>
+                <span class="slide-badge">Requirements</span>
+            </div>
+            <div class="slide-content">
+                <div class="cols-2">
+                    <div class="info-card">
+                        <h4>❌ The Problem in Today's Campuses</h4>
+                        <ul>
+                            <li><strong>Unregulated P2P Exchange:</strong> Students buy/sell coursebooks, lab supplies, and hostel electronics via informal, fragmented WhatsApp/Telegram groups with scam risks and zero accountability.</li>
+                            <li><strong>Hostel Waste Accumulation:</strong> Large volumes of recyclable paper registers and usable items are discarded in landfills at semester-end without collection logistics.</li>
+                            <li><strong>Manual Maintenance Tracking:</strong> Hostel maintenance issues rely on paper logbooks, leading to lost complaints and zero transparency on technician resolution SLAs.</li>
+                            <li><strong>Identity &amp; Trust Void:</strong> Existing public apps lack university domain verification (@campus.edu) or role governance.</li>
+                        </ul>
+                    </div>
+                    <div class="info-card" style="border-left: 4px solid #10b981;">
+                        <h4 style="color:#059669;">✔️ The Vendora Platform Solution</h4>
+                        <ul>
+                            <li><strong>Campus Identity &amp; RBAC:</strong> Strict university email binding and 6 role profiles (Student, Faculty, Admin, Maintenance Staff, Collection Staff, Representative).</li>
+                            <li><strong>Campus Marketplace:</strong> Peer-to-peer resource exchange with categorized search, buyer purchase requests, and seller-ownership security.</li>
+                            <li><strong>Scrap &amp; Giveaway Hub:</strong> Scheduled doorstep recyclable pickup by staff and free senior-to-junior giveaway claims.</li>
+                            <li><strong>Facilities Helpdesk:</strong> End-to-end ticketing state machine with category SLA tracking and discussion threads.</li>
+                            <li><strong>Simulated Payments:</strong> Idempotent transaction persistence with double-charge protection.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="speaker-notes">
+                    <strong>Presenter Speech:</strong>
+                    "Our project addresses the operational fragmentation found in university campuses. Currently, campus commerce happens in unstructured chat groups, hostel maintenance is tracked on paper, and recyclable waste goes into landfills. Vendora solves all four problems within a single platform governed by authenticated university roles."
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: SYSTEM ARCHITECTURE -->
+        <div class="slide" data-slide="3">
+            <div class="slide-header">
+                <div>
+                    <h2 class="slide-title">2. High-Level Microservices Architecture</h2>
+                    <p class="slide-subtitle">Event-driven, reactive perimeter gateway with dynamic service discovery</p>
+                </div>
+                <span class="slide-badge">Architecture</span>
+            </div>
+            <div class="slide-content">
+                <div class="diagram-box">
+                    <div class="mermaid">
+flowchart TD
+    Client["Client / Swagger UI / Postman"] -->|HTTP / REST| Gateway["Spring Cloud Gateway (:8080)\nPerimeter Security &amp; JWT Validation"]
+    Gateway <-->|Dynamic Discovery| Eureka["Netflix Eureka Server (:8761)\nIn-Memory Service Registry"]
+    Gateway -->|Proxied Route| Auth["vendora-auth-service (:8082)\nStateless JWT Minting"]
+    Gateway -->|Proxied Route| User["vendora-user-service (:8081)\nUser Profiles &amp; Roles"]
+    Gateway -->|Proxied Route| Market["vendora-marketplace-service (:8083)\nListings, Offers &amp; Chat"]
+    Gateway -->|Proxied Route| Helpdesk["vendora-helpdesk-service (:8084)\nMaintenance Ticket Lifecycle"]
+    Gateway -->|Proxied Route| Scrap["vendora-scrap-service (:8085)\nScrap Pickups &amp; Giveaways"]
+    Gateway -->|Proxied Route| Payment["vendora-payment-service (:8086)\nTransaction Idempotency"]
+    Auth -.->|Internal Secured REST| User
+    User & Market & Helpdesk & Scrap & Payment -->|JPA / JDBC| DB[("MySQL 8.0: vendora_db\nLogical Schema Isolation")]
+                    </div>
+                </div>
+                <div class="speaker-notes">
+                    <strong>Presenter Speech:</strong>
+                    "Our architecture features three clear tiers: the Edge Layer with Eureka Server and Spring Cloud Gateway, the Domain Microservices Tier with 6 specialized business services, and the Data Tier with MySQL. Eureka eliminates hardcoded hostnames, while our reactive Gateway handles centralized security filtering before routing requests downstream."
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: USE CASE DIAGRAM -->
+        <div class="slide" data-slide="4">
+            <div class="slide-header">
+                <div>
+                    <h2 class="slide-title">3. Comprehensive Use Case Diagram</h2>
+                    <p class="slide-subtitle">Role-based functional interactions across system actors</p>
+                </div>
+                <span class="slide-badge">Use Cases</span>
+            </div>
+            <div class="slide-content">
+                <div class="diagram-box">
+                    <div class="mermaid">
+flowchart LR
+    subgraph Actors["Campus Actors"]
+        Student["Student"]
+        Faculty["Faculty"]
+        StaffM["Maintenance Staff"]
+        StaffC["Collection Staff"]
+        Admin["Administrator"]
+    end
+
+    subgraph CoreUseCases["Vendora Functional Use Cases"]
+        UC1["Register &amp; Authenticate (JWT)"]
+        UC2["Browse &amp; Create Marketplace Listings"]
+        UC3["Submit Purchase Offer &amp; In-App Chat"]
+        UC4["Schedule Hostel Scrap Collection"]
+        UC5["Post &amp; Claim Free Giveaways"]
+        UC6["Raise Facility Maintenance Ticket"]
+        UC7["Add Comments to Ticket Discussion"]
+        UC8["Assign Technician to Maintenance Ticket"]
+        UC9["Transition Ticket Status (In Progress/Resolved)"]
+        UC10["Assign Collection Staff to Scrap Pickup"]
+        UC11["Execute Idempotent Payment"]
+        UC12["Approve Representative Role"]
+    end
+
+    Student --> UC1 & UC2 & UC3 & UC4 & UC5 & UC6 & UC7 & UC11
+    Faculty --> UC1 & UC2 & UC6 & UC7 & UC11
+    StaffM --> UC1 & UC7 & UC9
+    StaffC --> UC1 & UC4
+    Admin --> UC1 & UC8 & UC9 & UC10 & UC12
+                    </div>
+                </div>
+                <div class="speaker-notes">
+                    <strong>Presenter Speech:</strong>
+                    "This use case diagram illustrates our role-based authorization model. Students and faculty participate in commerce, recycling, and ticket creation. Maintenance and collection staff have restricted dashboards to accept and resolve tasks, while Administrators hold governance oversight for staff assignment and role elevations."
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: AUTHENTICATION & SECURITY FLOW -->
+        <div class="slide" data-slide="5">
+            <div class="slide-header">
+                <div>
+                    <h2 class="slide-title">4. Zero-Trust Security &amp; Authentication Flow</h2>
+                    <p class="slide-subtitle">Perimeter header sanitization, BCrypt hashing, and identity claim propagation</p>
+                </div>
+                <span class="slide-badge">Security</span>
+            </div>
+            <div class="slide-content">
+                <div class="diagram-box">
+                    <div class="mermaid">
+sequenceDiagram
+    autonumber
+    actor Client as User Client
+    participant GW as API Gateway (:8080)
+    participant Auth as Auth Service (:8082)
+    participant User as User Service (:8081)
+    participant Target as Downstream Service (:8083-8086)
+
+    Note over Client,GW: 1. Login Authentication
+    Client->>GW: POST /api/auth/login {email, password}
+    GW->>Auth: Forward to Auth Service
+    Auth->>User: GET /api/users/internal/by-email?email=...<br/>(Header: X-Internal-Secret: VendoraLocalInternalSecret2026)
+    User-->>Auth: Returns UserInternalAuthDto (BCrypt Hash, Role)
+    Auth->>Auth: BCrypt.checkpw(rawPassword, hash)
+    Auth-->>Client: 200 OK + Signed JWT Token (Expiry: 1 hour)
+
+    Note over Client,Target: 2. Protected Request with Identity Propagation
+    Client->>GW: GET /api/helpdesk/tickets (Authorization: Bearer jwt)
+    GW->>GW: 1. Strip all incoming client X-User-* headers
+    GW->>GW: 2. Validate HMAC-SHA256 signature &amp; expiration
+    GW->>GW: 3. Extract claims: sub (userId), email, role
+    GW->>Target: Forward trusted headers:<br/>X-User-Id: 2, X-User-Role: STUDENT, X-User-Email: ...
+    Target->>Target: Enforce Domain RBAC &amp; Resource Ownership
+    Target-->>Client: 200 OK Response
+                    </div>
+                </div>
+                <div class="speaker-notes">
+                    <strong>Presenter Speech:</strong>
+                    "Our security architecture guarantees that downstream microservices never trust client-supplied identity. The API Gateway acts as our zero-trust perimeter: it strips any injected identity headers, cryptographically validates the token's HMAC-SHA256 signature, and injects trusted identity headers. Password hashes are verified statelessly using BCrypt through an internal secured channel."
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: USER & AUTH SERVICES -->
+        <div class="slide" data-slide="6">
+            <div class="slide-header">
+                <div>
+                    <h2 class="slide-title">5. Implementation: User &amp; Authentication Services</h2>
+                    <p class="slide-subtitle">Decoupled identity governance, BCrypt encryption, and representative approval</p>
+                </div>
+                <span class="slide-badge">Services</span>
+            </div>
+            <div class="slide-content">
+                <div class="cols-2">
+                    <div class="info-card">
+                        <h4>🔐 Vendora Auth Service (:8082)</h4>
+                        <ul>
+                            <li><strong>Stateless Architecture:</strong> Contains <strong>0 database tables</strong>; queries User Service via internal REST.</li>
+                            <li><strong>Token Minting:</strong> Issues HMAC-SHA256 tokens using JJWT 0.12.6 encoding <code>userId</code>, <code>email</code>, and <code>role</code> with 1-hour expiration.</li>
+                            <li><strong>Endpoints:</strong> <code>POST /api/auth/login</code></li>
+                            <li><strong>Quality Status:</strong> <strong>36 Unit Tests</strong> | <strong>96.9% Coverage</strong> | Grade A</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h4>👤 Vendora User Service (:8081)</h4>
+                        <ul>
+                            <li><strong>Campus Profiles:</strong> Manages accounts with strict university domain email validation (<code>@campus.edu</code>).</li>
+                            <li><strong>Password Security:</strong> One-way password hashing via <code>BCryptPasswordEncoder</code> (strength 10).</li>
+                            <li><strong>Representative Workflow:</strong> Student applies for App Representative &rarr; Admin reviews &amp; approves.</li>
+                            <li><strong>Endpoints:</strong> <code>POST /api/registration/register</code>, <code>GET /api/users/profile</code>, <code>POST /api/users/representative/apply</code>, <code>PATCH /api/users/representative/approve</code>.</li>
+                            <li><strong>Quality Status:</strong> <strong>51 Unit Tests</strong> | <strong>89.7% Coverage</strong> | Grade A</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="speaker-notes">
+                    <strong>Presenter Speech:</strong>
+                    "The User Service manages campus identity and profile governance, while the Auth Service remains completely stateless. Notice that the Auth Service owns zero database tables; it verifies credentials via an internal REST API. Both services achieve approximately 90% and 97% code coverage respectively."
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: MARKETPLACE SERVICE -->
+        <div class="slide" data-slide="7">
+            <div class="slide-header">
+                <div>
+                    <h2 class="slide-title">6. Implementation: Marketplace Service</h2>
+                    <p class="slide-subtitle">Campus resource exchange, multi-attribute dynamic search, and buyer-seller chat</p>
+                </div>
+                <span class="slide-badge">Services</span>
+            </div>
+            <div class="slide-content">
+                <div class="cols-2">
+                    <div class="info-card">
+                        <h4>📦 Core Domain Entities</h4>
+                        <ul>
+                            <li><strong>Listing:</strong> Item title, description, category (BOOKS, ELECTRONICS, CYCLES, LAB_EQUIPMENT, FURNITURE), price, condition, status (AVAILABLE, SOLD, INACTIVE).</li>
+                            <li><strong>MarketplaceRequest:</strong> Buyer purchase offer, requested quantity, negotiation notes, status (PENDING, ACCEPTED, REJECTED).</li>
+                            <li><strong>Conversation &amp; Message:</strong> Threaded buyer-seller messages for campus meetups.</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h4>🛡️ Business Logic &amp; Validations</h4>
+                        <ul>
+                            <li><strong>Multi-Criteria Search:</strong> Filter listings by <code>category</code>, <code>minPrice</code>, <code>maxPrice</code>, <code>condition</code>, and search <code>keyword</code>.</li>
+                            <li><strong>Ownership Guard:</strong> Only the original seller (<code>seller_id == X-User-Id</code>) can edit or mark items as SOLD.</li>
+                            <li><strong>Input Boundary Checks:</strong> Enforces <code>@Positive</code> price, positive quantity, and non-empty titles.</li>
+                            <li><strong>Quality Status:</strong> <strong>69 Unit Tests</strong> | <strong>92.1% Coverage</strong> | Grade A</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="speaker-notes">
+                    <strong>Presenter Speech:</strong>
+                    "Marketplace Service facilitates peer-to-peer student commerce. It features multi-attribute dynamic search across categories and price ranges, buyer purchase requests, and threaded chat. Ownership checks prevent any student from altering or deleting listings they do not own. It is backed by 69 passing unit tests with 92.1% coverage."
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: SCRAP & GIVEAWAYS -->
+        <div class="slide" data-slide="8">
+            <div class="slide-header">
+                <div>
+                    <h2 class="slide-title">7. Implementation: Scrap Hub &amp; Giveaways</h2>
+                    <p class="slide-subtitle">Circular economy logistics and senior-to-junior reusable item donations</p>
+                </div>
+                <span class="slide-badge">Services</span>
+            </div>
+            <div class="slide-content">
+                <div class="cols-2">
+                    <div class="info-card">
+                        <h4>♻️ Workflow 1: Recyclable Scrap Pickups</h4>
+                        <ul>
+                            <li><strong>Student Pickup Booking:</strong> Submit scrap request (PAPER, PLASTIC, METAL, ELECTRONIC), estimated weight (kg), and hostel room number.</li>
+                            <li><strong>Coordinator Allocation:</strong> Administrator assigns a <code>COLLECTION_STAFF</code> member.</li>
+                            <li><strong>Doorstep Pickup:</strong> Staff visits hostel, verifies scrap, and transitions status to <code>COMPLETED</code>.</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h4>🎁 Workflow 2: Zero-Cost Giveaways</h4>
+                        <ul>
+                            <li><strong>Graduating Donations:</strong> Seniors list usable items (mattresses, desk lamps, curtains) at ₹0.00.</li>
+                            <li><strong>Interest Submissions:</strong> Juniors submit claim requests explaining their requirement.</li>
+                            <li><strong>Owner Acceptance:</strong> Listing owner accepts one recipient and closes the giveaway.</li>
+                            <li><strong>Quality Status:</strong> <strong>75 Unit Tests</strong> | <strong>92.9% Coverage</strong> | Grade A</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="speaker-notes">
+                    <strong>Presenter Speech:</strong>
+                    "The Scrap and Giveaway Service implements two distinct circular economy workflows. Workflow 1 coordinates physical doorstep collection of recyclables like old notebooks and registers with staff assignment. Workflow 2 allows seniors to give away useful hostel items to juniors for free. It is backed by 75 unit tests with 92.9% coverage."
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 9: FACILITIES HELPDESK -->
+        <div class="slide" data-slide="9">
+            <div class="slide-header">
+                <div>
+                    <h2 class="slide-title">8. Implementation: Facilities Helpdesk</h2>
+                    <p class="slide-subtitle">Digital maintenance ticketing state machine with threaded technician communication</p>
+                </div>
+                <span class="slide-badge">Services</span>
+            </div>
+            <div class="slide-content">
+                <div class="cols-2">
+                    <div class="info-card">
+                        <h4>🎫 Ticket Lifecycle State Machine</h4>
+                        <div class="mermaid">
+stateDiagram-v2
+    [*] --> OPEN: Student creates Ticket
+    OPEN --> ASSIGNED: Admin assigns Staff
+    ASSIGNED --> IN_PROGRESS: Technician begins work
+    IN_PROGRESS --> RESOLVED: Repair completed
+    RESOLVED --> CLOSED: Verified &amp; closed
+    CLOSED --> OPEN: Explicit Reopening
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <h4>⚙️ Capabilities &amp; Access Controls</h4>
+                        <ul>
+                            <li><strong>Categorization:</strong> ELECTRICAL, PLUMBING, FURNITURE, INTERNET_WIFI, LAB_EQUIPMENT, SANITATION, AC_COOLING.</li>
+                            <li><strong>Priority SLAs:</strong> LOW, MEDIUM, HIGH, URGENT.</li>
+                            <li><strong>Multi-Filter API:</strong> Filter tickets by <code>status</code>, <code>category</code>, and <code>staffId</code>.</li>
+                            <li><strong>Discussion Thread:</strong> Students and staff exchange real-time comments on tickets.</li>
+                            <li><strong>Quality Status:</strong> <strong>55 Unit Tests</strong> | <strong>89.0% Coverage</strong> | Grade A</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="speaker-notes">
+                    <strong>Presenter Speech:</strong>
+                    "The Helpdesk Service replaces paper registers with an automated ticketing workflow. It enforces a strict state machine from OPEN to CLOSED, allowing technicians to add resolution notes and students to exchange comments with assigned staff. With 55 unit tests, it maintains 89% code coverage."
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 10: PAYMENT SERVICE & IDEMPOTENCY -->
+        <div class="slide" data-slide="10">
+            <div class="slide-header">
+                <div>
+                    <h2 class="slide-title">9. Implementation: Simulated Payment &amp; Idempotency</h2>
+                    <p class="slide-subtitle">Financial transaction ledger and client-driven duplicate charge prevention</p>
+                </div>
+                <span class="slide-badge">Services</span>
+            </div>
+            <div class="slide-content">
+                <div class="cols-2">
+                    <div class="info-card">
+                        <h4>💳 The Idempotency State Engine</h4>
+                        <div class="mermaid">
+flowchart TD
+    Req["POST /api/payments/process\n{ idempotencyKey: 'PAY-UUID-8899', amount: 450.00 }"] --> Check{"Key exists in\npayments table?"}
+    Check -- Yes --> ReturnExist["Return Existing Record\n(HTTP 200 OK, No duplicate debit)"]
+    Check -- No --> Execute["Validate &amp; Execute Transaction"]
+    Execute --> Save["Persist status: COMPLETED"]
+    Save --> ReturnNew["Return New Record (HTTP 201 Created)"]
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <h4>🛡️ Financial Integrity Safeguards</h4>
+                        <ul>
+                            <li><strong>Network Timeout Protection:</strong> Duplicate requests caused by client retries or double-clicks are intercepted by the unique <code>idempotency_key</code>.</li>
+                            <li><strong>Multi-Reference Linking:</strong> Binds transactions to <code>MARKETPLACE</code> orders or <code>SCRAP</code> payouts.</li>
+                            <li><strong>State Transitions:</strong> Tracks <code>PENDING</code> &rarr; <code>COMPLETED</code> / <code>FAILED</code>.</li>
+                            <li><strong>Quality Status:</strong> <strong>44 Unit Tests</strong> | <strong>93.4% Coverage</strong> | Grade A</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="speaker-notes">
+                    <strong>Presenter Speech:</strong>
+                    "Payment Service ensures financial transaction integrity through idempotency protection. If a network blip causes a student to submit a payment twice with the same idempotency key, the service detects the duplicate and returns the original transaction record without re-executing charges. It boasts 93.4% test coverage."
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 11: END TO END SEQUENCE DIAGRAM -->
+        <div class="slide" data-slide="11">
+            <div class="slide-header">
+                <div>
+                    <h2 class="slide-title">10. End-to-End Campus Workflow Sequence Diagram</h2>
+                    <p class="slide-subtitle">Cross-service coordination during a complete campus commerce &amp; support scenario</p>
+                </div>
+                <span class="slide-badge">Sequence Diagram</span>
+            </div>
+            <div class="slide-content">
+                <div class="diagram-box">
+                    <div class="mermaid">
+sequenceDiagram
+    autonumber
+    actor Buyer as Student (Buyer)
+    actor Seller as Student (Seller)
+    participant GW as API Gateway (:8080)
+    participant Market as Marketplace (:8083)
+    participant Payment as Payment (:8086)
+    participant Helpdesk as Helpdesk (:8084)
+
+    Note over Buyer,Market: 1. Negotiation Flow
+    Buyer->>GW: POST /api/listings/5/requests {qty: 1, msg: "Buy cycle"}
+    GW->>Market: Forward request with X-User-Id: 2
+    Market-->>Buyer: 201 Created (MarketplaceRequest ID: 12)
+    Seller->>GW: PATCH /api/listings/requests/12/status {status: "ACCEPTED"}
+    GW->>Market: Forward update
+    Market-->>Seller: 200 OK (Status: ACCEPTED)
+
+    Note over Buyer,Payment: 2. Cashless Payment Flow
+    Buyer->>GW: POST /api/payments/process {refType: "MARKETPLACE", refId: 5, amount: 1500.00, key: "UUID-1"}
+    GW->>Payment: Forward payment
+    Payment-->>Buyer: 200 OK (Status: COMPLETED, Ref: TXN-9988)
+
+    Note over Buyer,Helpdesk: 3. Facilities Support Flow
+    Buyer->>GW: POST /api/helpdesk/tickets {title: "Cycle stand lock jammed", category: "OTHER"}
+    GW->>Helpdesk: Forward ticket creation
+    Helpdesk-->>Buyer: 201 Created (TicketNumber: HD-69440EDB, Status: OPEN)
+                    </div>
+                </div>
+                <div class="speaker-notes">
+                    <strong>Presenter Speech:</strong>
+                    "This sequence diagram shows how our microservices collaborate in real campus scenarios: a student negotiates a cycle purchase through Marketplace Service, executes an idempotent payment through Payment Service, and raises a maintenance ticket with Helpdesk Service—all routed securely through the central API Gateway."
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 12: DATABASE ARCHITECTURE (ER DIAGRAM) -->
+        <div class="slide" data-slide="12">
+            <div class="slide-header">
+                <div>
+                    <h2 class="slide-title">11. Database Architecture &amp; ER Diagram</h2>
+                    <p class="slide-subtitle">Pragmatic Shared Schema with strict logical domain ownership</p>
+                </div>
+                <span class="slide-badge">ER Diagram</span>
+            </div>
+            <div class="slide-content">
+                <div class="diagram-box">
+                    <div class="mermaid">
+erDiagram
+    USERS ||--o| APP_REPRESENTATIVES : "1:1 profile"
+    USERS {
+        bigint id PK
+        varchar full_name
+        varchar email UK
+        varchar role
+    }
+    LISTINGS ||--o{ MARKETPLACE_REQUESTS : "receives"
+    LISTINGS ||--o{ CONVERSATIONS : "initiates"
+    CONVERSATIONS ||--o{ MESSAGES : "contains"
+    LISTINGS {
+        bigint id PK
+        bigint seller_id "Scalar User ID"
+        varchar title
+        decimal price
+        varchar status
+    }
+    SCRAP_REQUESTS {
+        bigint id PK
+        bigint user_id "Scalar User ID"
+        varchar material_type
+        decimal estimated_quantity_kg
+        varchar status
+    }
+    GIVEAWAYS ||--o{ GIVEAWAY_INTERESTS : "receives"
+    GIVEAWAYS {
+        bigint id PK
+        bigint owner_id "Scalar User ID"
+        varchar title
+        varchar status
+    }
+    TICKETS ||--o{ TICKET_COMMENTS : "contains"
+    TICKETS {
+        bigint id PK
+        varchar ticket_number UK
+        bigint user_id "Scalar User ID"
+        varchar category
+        varchar status
+    }
+    PAYMENTS {
+        bigint id PK
+        bigint user_id "Scalar User ID"
+        decimal amount
+        varchar status
+        varchar idempotency_key UK
+    }
+                    </div>
+                </div>
+                <div class="speaker-notes">
+                    <strong>Presenter Speech:</strong>
+                    "Our database architecture balances academic practicality with strict microservice design. We use one MySQL instance named vendora_db, but enforce absolute logical isolation: there are zero cross-domain SQL joins and zero physical foreign keys between service domains. Moving to 6 separate databases in production requires only changing connection strings without altering a single line of Java code."
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 13: CORE CLASS DIAGRAM -->
+        <div class="slide" data-slide="13">
+            <div class="slide-header">
+                <div>
+                    <h2 class="slide-title">12. Core Class Diagram &amp; Layered Design</h2>
+                    <p class="slide-subtitle">Standard enterprise Controller &rarr; Service &rarr; Repository &rarr; Entity hierarchy</p>
+                </div>
+                <span class="slide-badge">Class Diagram</span>
+            </div>
+            <div class="slide-content">
+                <div class="diagram-box">
+                    <div class="mermaid">
+classDiagram
+    direction LR
+    TicketController --> TicketService : invokes
+    TicketService <|.. TicketServiceImpl : implements
+    TicketServiceImpl --> TicketRepository : persists
+    TicketRepository --> Ticket : manages
+    TicketController ..> TicketResponse : returns
+
+    class TicketController {
+        -TicketService ticketService
+        +createTicket(request)
+        +getAllTickets(status)
+        +updateStatus(id)
+    }
+
+    class TicketService {
+        +createTicket(dto)
+        +getAllTickets(filter)
+        +updateStatus(id)
+    }
+    <<interface>> TicketService
+
+    class TicketServiceImpl {
+        -TicketRepository ticketRepo
+        +createTicket(dto)
+        +updateStatus(id)
+    }
+
+    class TicketRepository {
+        +findByUserId(userId)
+        +findByStatus(status)
+    }
+    <<interface>> TicketRepository
+
+    class Ticket {
+        +Long id
+        +String ticketNumber
+        +Long userId
+        +Category category
+        +Priority priority
+        +Status status
+    }
+
+    class TicketResponse {
+        +Long id
+        +String ticketNumber
+        +Category category
+        +Status status
+    }
+                    </div>
+                </div>
+                <div class="speaker-notes">
+                    <strong>Presenter Speech:</strong>
+                    "Every microservice follows strict separation of concerns across Controllers, Service interfaces, implementations, and Repositories. Request and Response DTOs guarantee that internal database fields are never leaked to external clients."
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 14: EXCEPTION HANDLING & AOP -->
+        <div class="slide" data-slide="14">
+            <div class="slide-header">
+                <div>
+                    <h2 class="slide-title">13. Exception Handling &amp; Cross-Cutting Concerns</h2>
+                    <p class="slide-subtitle">Standardized JSON error schemas, Aspect-Oriented Logging, and Bean Validation</p>
+                </div>
+                <span class="slide-badge">Cross-Cutting</span>
+            </div>
+            <div class="slide-content">
+                <div class="cols-2">
+                    <div class="info-card">
+                        <h4>⚠️ Centralized Exception Handling</h4>
+                        <p style="font-size:12.5px; color:#475569; margin-bottom:8px;">Every service implements <code>@RestControllerAdvice</code> with standardized JSON output:</p>
+                        <pre style="background:#0f172a; color:#38bdf8; padding:10px; border-radius:6px; font-size:11.5px; overflow-x:auto;">
+{
+  "timestamp": "2026-11-18T09:30:00.123",
+  "status": 404,
+  "error": "Not Found",
+  "message": "Ticket not found with id: 42",
+  "path": "/api/helpdesk/tickets/42"
+}</pre>
+                        <ul style="margin-top:10px;">
+                            <li><code>ResourceNotFoundException</code> &rarr; <strong>404 Not Found</strong></li>
+                            <li><code>BadRequestException</code> &rarr; <strong>400 Bad Request</strong></li>
+                            <li><code>ForbiddenException</code> &rarr; <strong>403 Forbidden</strong></li>
+                            <li><code>ConflictException</code> &rarr; <strong>409 Conflict</strong></li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h4>⏱️ Aspect-Oriented Logging (AOP)</h4>
+                        <ul>
+                            <li><strong>Around Advice:</strong> Intercepts all Controller and Service methods using <code>@Around</code> pointcuts.</li>
+                            <li><strong>Execution Benchmarking:</strong> Calculates wall-clock execution time in milliseconds via Spring <code>StopWatch</code>.</li>
+                            <li><strong>Zero Stack Trace Leakage:</strong> Uncaught exceptions are caught, logged with contextual arguments, and sanitized before returning HTTP 500 to clients.</li>
+                            <li><strong>Jakarta Validation:</strong> Annotations (<code>@NotBlank</code>, <code>@Email</code>, <code>@Positive</code>) reject invalid inputs at gateway borders.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="speaker-notes">
+                    <strong>Presenter Speech:</strong>
+                    "We handle cross-cutting concerns uniformly across all services. Our GlobalExceptionHandler maps domain errors to standard HTTP status codes without leaking internal stack traces. Meanwhile, Spring AOP Logging intercepts execution across all layers to benchmark performance in real time."
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 15: CODE QUALITY & SONARQUBE -->
+        <div class="slide" data-slide="15">
+            <div class="slide-header">
+                <div>
+                    <h2 class="slide-title">14. Quality Assurance, SonarQube &amp; Test Coverage</h2>
+                    <p class="slide-subtitle">Continuous inspection verification on SonarQube Server 26.11 (Port 9002)</p>
+                </div>
+                <span class="slide-badge">Quality Metrics</span>
+            </div>
+            <div class="slide-content">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Microservice</th>
+                            <th>Quality Gate</th>
+                            <th>Coverage</th>
+                            <th>Unit Tests</th>
+                            <th>Security</th>
+                            <th>Reliability</th>
+                            <th>Maintainability</th>
+                            <th>Duplications</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>vendora-eureka-server</strong></td><td><span class="status-pass">PASSED</span></td><td><strong>100.0%</strong></td><td>2</td><td>Grade A</td><td>Grade A</td><td>Grade A</td><td>0.0%</td></tr>
+                        <tr><td><strong>vendora-auth-service</strong></td><td><span class="status-pass">PASSED</span></td><td><strong>96.9%</strong></td><td>36</td><td>Grade A</td><td>Grade A</td><td>Grade A</td><td>0.0%</td></tr>
+                        <tr><td><strong>vendora-payment-service</strong></td><td><span class="status-pass">PASSED</span></td><td><strong>93.4%</strong></td><td>44</td><td>Grade A</td><td>Grade A</td><td>Grade A</td><td>19.6%</td></tr>
+                        <tr><td><strong>vendora-scrap-service</strong></td><td><span class="status-pass">PASSED</span></td><td><strong>92.9%</strong></td><td>75</td><td>Grade A</td><td>Grade A</td><td>Grade A</td><td>22.5%</td></tr>
+                        <tr><td><strong>vendora-marketplace-service</strong></td><td><span class="status-pass">PASSED</span></td><td><strong>92.1%</strong></td><td>69</td><td>Grade A</td><td>Grade A</td><td>Grade A</td><td>22.6%</td></tr>
+                        <tr><td><strong>vendora-api-gateway</strong></td><td><span class="status-pass">PASSED</span></td><td><strong>90.0%</strong></td><td>11</td><td>Grade A</td><td>Grade A</td><td>Grade A</td><td>0.0%</td></tr>
+                        <tr><td><strong>vendora-user-service</strong></td><td><span class="status-pass">PASSED</span></td><td><strong>89.7%</strong></td><td>51</td><td>Grade A</td><td>Grade A</td><td>Grade A</td><td>14.9%</td></tr>
+                        <tr><td><strong>vendora-helpdesk-service</strong></td><td><span class="status-pass">PASSED</span></td><td><strong>89.0%</strong></td><td>55</td><td>Grade A</td><td>Grade A</td><td>Grade A</td><td>20.9%</td></tr>
+                    </tbody>
+                </table>
+                <div class="info-card" style="margin-top:10px;">
+                    <p style="font-size:13px; color:#334155;"><strong>Summary:</strong> 343 automated unit tests execute with <strong>0 failures and 0 errors</strong>. All static analysis blocker code smells (<code>java:S2699</code>) and security rules (<code>java:S5122</code>, <code>java:S4502</code>) resolved. Duplications reflect natural DTO &amp; Entity field mirroring awarded Grade A Maintainability.</p>
+                </div>
+                <div class="speaker-notes">
+                    <strong>Presenter Speech:</strong>
+                    "Our project undergoes continuous code quality inspection. All 8 microservices achieve a 100% PASSED green Quality Gate in SonarQube with 0 bugs, 0 vulnerabilities, 0 code smells, and Grade A across all categories. Total test coverage ranges from 89.0% to 100.0% across 343 automated unit tests."
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 16: CONCLUSION & DEMO -->
+        <div class="slide" data-slide="16">
+            <div class="slide-header">
+                <div>
+                    <h2 class="slide-title">15. Conclusion, Future Roadmap &amp; Live Demo</h2>
+                    <p class="slide-subtitle">Enterprise milestones achieved and demonstration readiness</p>
+                </div>
+                <span class="slide-badge">Conclusion</span>
+            </div>
+            <div class="slide-content">
+                <div class="cols-2">
+                    <div class="info-card">
+                        <h4>🏆 Key Project Deliverables</h4>
+                        <ul>
+                            <li><strong>8 Active Application Runtimes:</strong> Netflix Eureka, Spring Cloud Gateway, and 6 business services.</li>
+                            <li><strong>Zero-Trust Perimeter Security:</strong> Cryptographic HMAC-SHA256 tokens with header sanitization.</li>
+                            <li><strong>Production Testing Rigor:</strong> 343 automated tests with &gt;89% to 100% verified coverage.</li>
+                            <li><strong>1-Click Operational Tooling:</strong> Automated scripts for startup, shutdown, and E2E verification.</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h4>🚀 Future Roadmap (Deferred Scope)</h4>
+                        <ul>
+                            <li><strong>Real Payment Gateway:</strong> Razorpay / UPI webhook integration with campus escrow hold-and-release.</li>
+                            <li><strong>WebSocket Chat:</strong> Replacing HTTP polling with STOMP/WebSocket real-time messaging.</li>
+                            <li><strong>Textbook Specialization:</strong> Google Books / OpenLibrary ISBN metadata auto-fill.</li>
+                            <li><strong>Responsive UI:</strong> React / Next.js client frontend with Tailwind CSS.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="info-card" style="text-align:center; background:#ecfdf5; border-color:#a7f3d0; margin-top:10px;">
+                    <h3 style="color:#065f46; font-size:18px;">✨ Ready for Live Demonstration ✨</h3>
+                    <p style="font-size:13.5px; color:#047857; margin-top:4px;">
+                        <strong>Eureka Registry:</strong> <code>http://localhost:8761</code> &bull; 
+                        <strong>Central Swagger UI:</strong> <code>http://localhost:8080/swagger-ui/index.html</code> &bull; 
+                        <strong>SonarQube:</strong> <code>http://localhost:9002</code>
+                    </p>
+                </div>
+
+                <div class="speaker-notes">
+                    <strong>Presenter Speech:</strong>
+                    "In conclusion, Vendora delivers a production-grade, highly tested campus microservices platform that exceeds all architectural, security, and quality benchmarks. We are now ready to demonstrate the live system across Eureka, Swagger UI, and SonarQube, and welcome any questions from the panel."
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- BOTTOM CONTROLS BAR -->
+    <div id="controls">
+        <div style="font-weight:700; color:#f8fafc; font-size:15px;">
+            VENDORA <span style="font-weight:400; color:#94a3b8;">| Presentation Slide Deck</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:20px;">
+            <div id="slide-indicator" style="font-weight:700; color:#38bdf8;">Slide 1 of 16</div>
+            <div class="btn-group">
+                <button onclick="prevSlide()">◀ Previous (Left)</button>
+                <button onclick="nextSlide()">Next (Right) ▶</button>
+                <button onclick="toggleNotes()">Toggle Notes (S)</button>
+                <button onclick="toggleFullscreen()">Fullscreen (F)</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 16;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress-bar');
+        const slideIndicator = document.getElementById('slide-indicator');
+        let showNotes = true;
+
+        function updateSlide(newIndex) {
+            if (newIndex < 1 || newIndex > totalSlides) return;
+            slides.forEach(s => s.classList.remove('active'));
+            currentSlide = newIndex;
+            const activeSlide = document.querySelector(`.slide[data-slide="${currentSlide}"]`);
+            if (activeSlide) {
+                activeSlide.classList.add('active');
+            }
+            progressBar.style.width = ((currentSlide / totalSlides) * 100) + '%';
+            slideIndicator.innerText = `Slide ${currentSlide} of ${totalSlides}`;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) updateSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) updateSlide(currentSlide - 1);
+        }
+
+        function toggleNotes() {
+            showNotes = !showNotes;
+            document.querySelectorAll('.speaker-notes').forEach(el => {
+                el.style.display = showNotes ? 'block' : 'none';
+            });
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {});
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // Keyboard Navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                prevSlide();
+            } else if (e.key === 's' || e.key === 'S') {
+                toggleNotes();
+            } else if (e.key === 'f' || e.key === 'F') {
+                toggleFullscreen();
+            }
+        });
+
+        // Initialize Progress Bar
+        progressBar.style.width = ((currentSlide / totalSlides) * 100) + '%';
+    </script>
+</body>
+</html>

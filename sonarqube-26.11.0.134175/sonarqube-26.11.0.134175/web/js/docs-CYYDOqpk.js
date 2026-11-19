@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{a as e}from"./rolldown-runtime-LzpV0vpq.js";import{w as t}from"./vendor-BinpZ4gA.js";import{n,t as r}from"./doc-links-Bzb1j9cf.js";import{t as i}from"./AppStateContext-4DM0Ree_.js";var a=e(t());function o(e,t){return`${e}/${t.replace(/^\//,``)}`}function s(e){let{documentationUrl:t}=a.useContext(i),n=a.useCallback(e=>o(t,e),[t]);return e?n(e):n}var c=new Set(Object.values(n));function l(e){let{documentationUrl:t}=a.useContext(i),n=a.useCallback(e=>o(c.has(e)?r:t,e),[t]);return e===void 0?n:n(e)}export{s as n,l as t};

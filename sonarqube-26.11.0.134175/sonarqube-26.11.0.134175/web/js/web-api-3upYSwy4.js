@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{t as e}from"./error-BSkW5sKm.js";import{M as t}from"./request-iI6TN18u.js";function n(n=!0){return t(`/api/webservices/list`,{include_internals:n}).then(e=>e.webServices).catch(e)}function r(n,r){return t(`/api/webservices/response_example`,{controller:n,action:r}).catch(e)}function i(){return t(`/api/v2/api-docs`).catch(e)}export{r as n,n as r,i as t};

@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+function e(e,t,n){try{let r=n?`${e}.${n}`:e;t?globalThis.localStorage.setItem(r,t):globalThis.localStorage.removeItem(r)}catch{}}function t(e,t){try{globalThis.localStorage.removeItem(t?`${e}.${t}`:e)}catch{}}function n(e,t){try{return globalThis.localStorage.getItem(t?`${e}.${t}`:e)}catch{return null}}export{t as n,e as r,n as t};

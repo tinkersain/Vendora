@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+var e={ALL:`__ALL__`,ALL_EXCEPT_PENDING:`__ALL_EXCEPT_PENDING__`},t=`ALL_TYPES`,n={ALL:`__ALL__`,ONLY_CURRENTS:`CURRENTS`},r={status:e.ALL_EXCEPT_PENDING,taskType:t,currents:n.ALL,minSubmittedAt:void 0,maxExecutedAt:void 0,query:``};export{e as i,n,r,t};

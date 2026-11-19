@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{t as e}from"./error-BSkW5sKm.js";import{M as t}from"./request-iI6TN18u.js";import{A as n,z as r}from"./measures-koprRXwh.js";function i(n){return t(`/api/metrics/search`,n).catch(e)}function a(e){return t(e);function t(e={ps:500},a){return i(e).then(e=>({...e,metrics:n(e.metrics)})).then(e=>({...e,metrics:r(e.metrics)})).then(n=>{let r=a?a.metrics.concat(n.metrics):n.metrics;return n.p*n.ps>=n.total?r:t({...e,p:n.p+1},{...n,metrics:r})})}}export{a as t};

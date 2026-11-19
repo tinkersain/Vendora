@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{B as e,U as t}from"./request-iI6TN18u.js";import{m as n}from"./datefns-CyM72GNA.js";function r(){return t().serverStatus}function i(){return t().instance}function a(){return t().official}function o(t){return n(e(t),new Date)}export{a as i,r as n,o as r,i as t};

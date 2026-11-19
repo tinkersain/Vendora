@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{o as e}from"./metrics-faj-fOi3.js";var t={[e.Security]:`software_quality.SECURITY`,[e.Maintainability]:`software_quality.MAINTAINABILITY`,[e.Reliability]:`software_quality.RELIABILITY`};export{t};

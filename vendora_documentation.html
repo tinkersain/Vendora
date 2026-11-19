@@ -1,0 +1,2029 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vendora Platform — Comprehensive Technical Architecture & Master Project Documentation</title>
+    <script src="mermaid.min.js"></script>
+    <script>
+        window.onload = function() {
+            mermaid.initialize({
+                startOnLoad: true,
+                theme: 'neutral',
+                securityLevel: 'loose',
+                er: { useMaxWidth: false },
+                flowchart: { useMaxWidth: false, htmlLabels: true },
+                sequence: { useMaxWidth: false, showSequenceNumbers: true },
+                gantt: { useMaxWidth: false, fontSize: 11, barHeight: 18, barGap: 3 }
+            });
+        };
+    </script>
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 12mm 12mm 12mm 12mm;
+        }
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .page-break {
+                page-break-after: always;
+                break-after: page;
+            }
+            .no-break {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+            table {
+                page-break-inside: auto;
+            }
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+            thead {
+                display: table-header-group;
+            }
+            h1 {
+                page-break-before: always;
+                break-before: page;
+            }
+            h1.no-break-before {
+                page-break-before: avoid;
+                break-before: avoid;
+            }
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 9.5pt;
+            line-height: 1.48;
+            color: #1e293b;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Cover Page Styling */
+        .cover-page {
+            height: 94vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 25px 15px;
+            page-break-after: always;
+            break-after: page;
+        }
+        .cover-header {
+            border-bottom: 3px solid #2563eb;
+            padding-bottom: 18px;
+        }
+        .cover-brand {
+            font-size: 36pt;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: #0f172a;
+            margin: 0;
+            text-transform: uppercase;
+        }
+        .cover-motto {
+            font-size: 13pt;
+            font-weight: 500;
+            color: #2563eb;
+            margin-top: 4px;
+            letter-spacing: 0.5px;
+        }
+        .cover-title-block {
+            margin: 25px 0;
+        }
+        .cover-title {
+            font-size: 23pt;
+            font-weight: 700;
+            line-height: 1.25;
+            color: #0f172a;
+            margin-bottom: 10px;
+        }
+        .cover-subtitle {
+            font-size: 11.5pt;
+            color: #475569;
+            line-height: 1.45;
+        }
+        .cover-meta-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 9.5pt;
+        }
+        .cover-meta-table td {
+            padding: 6px 10px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .cover-meta-table td.label {
+            font-weight: 600;
+            color: #0f172a;
+            width: 32%;
+            background-color: #f8fafc;
+        }
+        .cover-footer {
+            border-top: 1px solid #cbd5e1;
+            padding-top: 10px;
+            font-size: 8.5pt;
+            color: #64748b;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        /* Headings */
+        h1 {
+            font-size: 17pt;
+            font-weight: 700;
+            color: #0f172a;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #2563eb;
+        }
+        h2 {
+            font-size: 12.5pt;
+            font-weight: 600;
+            color: #1e293b;
+            margin-top: 16px;
+            margin-bottom: 6px;
+            padding-bottom: 3px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        h3 {
+            font-size: 11pt;
+            font-weight: 600;
+            color: #334155;
+            margin-top: 12px;
+            margin-bottom: 5px;
+        }
+        h4 {
+            font-size: 10pt;
+            font-weight: 600;
+            color: #475569;
+            margin-top: 8px;
+            margin-bottom: 4px;
+        }
+        p {
+            margin: 0 0 7px 0;
+            text-align: justify;
+        }
+        ul, ol {
+            margin: 0 0 8px 0;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 2.5px;
+        }
+        
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 8px 0;
+            font-size: 8pt;
+            line-height: 1.3;
+        }
+        th {
+            background-color: #0f172a;
+            color: #ffffff;
+            font-weight: 600;
+            text-align: left;
+            padding: 5px 7px;
+            border: 1px solid #0f172a;
+        }
+        td {
+            padding: 4px 6px;
+            border: 1px solid #cbd5e1;
+            vertical-align: top;
+        }
+        tr:nth-child(even) td {
+            background-color: #f8fafc;
+        }
+        
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 1.5px 5px;
+            font-size: 7pt;
+            font-weight: 700;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-completed {
+            background-color: #dcfce7;
+            color: #15803d;
+            border: 1px solid #86efac;
+        }
+        .badge-progress {
+            background-color: #fef3c7;
+            color: #b45309;
+            border: 1px solid #fde68a;
+        }
+        .badge-notstarted {
+            background-color: #ffe4e6;
+            color: #be123c;
+            border: 1px solid #fecdd3;
+        }
+        
+        /* Code & Preformatted */
+        pre {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 3px solid #2563eb;
+            border-radius: 4px;
+            padding: 7px 9px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            font-size: 7.5pt;
+            line-height: 1.35;
+            overflow-x: auto;
+            margin: 6px 0;
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+        code {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            font-size: 8pt;
+            background-color: #f1f5f9;
+            padding: 1px 3px;
+            border-radius: 3px;
+            color: #0f172a;
+        }
+        pre code {
+            background-color: transparent;
+            padding: 0;
+            border-radius: 0;
+            color: inherit;
+        }
+        
+        /* Callouts / Notes */
+        .callout {
+            background-color: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 7px 10px;
+            margin: 8px 0;
+            border-radius: 0 4px 4px 0;
+            font-size: 8.5pt;
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+        .callout-title {
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 3px;
+            display: block;
+            font-size: 9pt;
+        }
+        
+        /* Mermaid Diagram Containers */
+        .mermaid-container {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 8px;
+            margin: 10px 0;
+            text-align: center;
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+        .mermaid {
+            display: inline-block;
+            margin: 0 auto;
+        }
+        
+        /* Table of Contents */
+        .toc-list {
+            list-style: none;
+            padding-left: 0;
+            margin: 14px 0;
+        }
+        .toc-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px dotted #cbd5e1;
+            font-size: 9.5pt;
+        }
+        .toc-item.level-1 {
+            font-weight: 700;
+            color: #0f172a;
+            margin-top: 5px;
+            border-bottom: 1px solid #94a3b8;
+        }
+        .toc-item.level-2 {
+            padding-left: 16px;
+            color: #334155;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+<!-- COVER PAGE -->
+<div class="cover-page">
+    <div class="cover-header">
+        <h1 class="cover-brand no-break-before">VENDORA</h1>
+        <div class="cover-motto">Your Campus. Your Community. One Platform.</div>
+    </div>
+    
+    <div class="cover-title-block">
+        <div class="cover-title">Comprehensive Technical Architecture &amp; Master Project Documentation</div>
+        <div class="cover-subtitle">Complete Microservices Blueprint, Distributed System Design, Implementation Verification, Database ERD, REST API Contract, and Final Evaluation Defense</div>
+        
+        <table class="cover-meta-table">
+            <tr>
+                <td class="label">Project Name</td>
+                <td><strong>Vendora Campus Community Ecosystem</strong></td>
+            </tr>
+            <tr>
+                <td class="label">Architecture Model</td>
+                <td>Distributed Microservices Architecture (Spring Cloud &amp; Netflix Eureka)</td>
+            </tr>
+            <tr>
+                <td class="label">Baseline Version</td>
+                <td><strong>2.0 — Consolidated Implementation Baseline</strong></td>
+            </tr>
+            <tr>
+                <td class="label">Target Runtime Stack</td>
+                <td>Java 17 / 25 LTS • Spring Boot 4.1.2 • Spring Cloud 2025.1.4 • MySQL 8.x • JJWT 0.12.6</td>
+            </tr>
+            <tr>
+                <td class="label">Perimeter Security</td>
+                <td>Stateless JWT (HMAC-SHA256), Spring Cloud Gateway WebFlux, BCrypt, RBAC</td>
+            </tr>
+            <tr>
+                <td class="label">Database Architecture</td>
+                <td>Consolidated Schema (<code>vendora_db</code>) with Logical Entity Isolation</td>
+            </tr>
+            <tr>
+                <td class="label">Test Execution Status</td>
+                <td><strong>59 of 59 Automated Unit Tests Passing (0 Failures, 0 Errors)</strong></td>
+            </tr>
+            <tr>
+                <td class="label">Candidate / Author</td>
+                <td><strong>Tanisha Kar</strong> (Campus Identity: <code>tanisha.kar.test@campus.edu</code>)</td>
+            </tr>
+            <tr>
+                <td class="label">Publication Date</td>
+                <td>November 16, 2026</td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="cover-footer">
+        <div><strong>Vendora Ecosystem</strong> • Autonomous University Infrastructure</div>
+        <div>Confidential &amp; Proprietary • Academic Evaluation Master Document</div>
+    </div>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<div class="page-break">
+    <h1 class="no-break-before">Table of Contents</h1>
+    <ul class="toc-list">
+        <li class="toc-item level-1"><span>1. Project Overview</span><span>Page 3</span></li>
+        <li class="toc-item level-2"><span>1.1 Concept &amp; Value Proposition</span><span></span></li>
+        <li class="toc-item level-2"><span>1.2 Core Project Objectives</span><span></span></li>
+        <li class="toc-item level-2"><span>1.3 Target Users &amp; Role Taxonomy</span><span></span></li>
+        
+        <li class="toc-item level-1"><span>2. System Architecture</span><span>Page 5</span></li>
+        <li class="toc-item level-2"><span>2.1 Microservices Roster &amp; Runtime Topology</span><span></span></li>
+        <li class="toc-item level-2"><span>2.2 Security Architecture &amp; Perimeter Header Propagation</span><span></span></li>
+        <li class="toc-item level-2"><span>2.3 Inter-Service Communication (Auth &harr; User Service)</span><span></span></li>
+        
+        <li class="toc-item level-1"><span>3. Implementation Status: Service-by-Service Breakdown</span><span>Page 8</span></li>
+        <li class="toc-item level-2"><span>3.1 vendora-eureka-server (:8761)</span><span></span></li>
+        <li class="toc-item level-2"><span>3.2 vendora-api-gateway (:8080)</span><span></span></li>
+        <li class="toc-item level-2"><span>3.3 vendora-auth-service (:8082)</span><span></span></li>
+        <li class="toc-item level-2"><span>3.4 vendora-user-service (:8081)</span><span></span></li>
+        <li class="toc-item level-2"><span>3.5 vendora-marketplace-service (:8083)</span><span></span></li>
+        <li class="toc-item level-2"><span>3.6 vendora-scrap-service (:8085)</span><span></span></li>
+        <li class="toc-item level-2"><span>3.7 vendora-payment-service (:8086)</span><span></span></li>
+        <li class="toc-item level-2"><span>3.8 vendora-helpdesk-service (:8084)</span><span></span></li>
+        
+        <li class="toc-item level-1"><span>4. Database Design &amp; Entity Relationship Architecture</span><span>Page 11</span></li>
+        <li class="toc-item level-2"><span>4.1 Consolidated Schema Strategy &amp; Boundary Rules</span><span></span></li>
+        <li class="toc-item level-2"><span>4.2 Comprehensive Entity Relationship Diagram (ERD)</span><span></span></li>
+        <li class="toc-item level-2"><span>4.3 Complete Data Dictionary &amp; Table Constraints</span><span></span></li>
+        
+        <li class="toc-item level-1"><span>5. Comprehensive REST API Documentation</span><span>Page 14</span></li>
+        <li class="toc-item level-2"><span>5.1 Authentication Service Endpoints (:8082)</span><span></span></li>
+        <li class="toc-item level-2"><span>5.2 User &amp; Identity Service Endpoints (:8081)</span><span></span></li>
+        <li class="toc-item level-2"><span>5.3 Marketplace &amp; Commerce Service Endpoints (:8083)</span><span></span></li>
+        <li class="toc-item level-2"><span>5.4 Scrap Collection &amp; Giveaways Service Endpoints (:8085)</span><span></span></li>
+        <li class="toc-item level-2"><span>5.5 Payment &amp; Settlement Service Endpoints (:8086)</span><span></span></li>
+        
+        <li class="toc-item level-1"><span>6. Pending Implementation &amp; Gaps Analysis</span><span>Page 19</span></li>
+        <li class="toc-item level-1"><span>7. Remaining Features to Achieve 100% Project Completion</span><span>Page 21</span></li>
+        <li class="toc-item level-1"><span>8. Testing Status &amp; Quality Verification</span><span>Page 23</span></li>
+        <li class="toc-item level-1"><span>9. Project Completion Roadmap</span><span>Page 25</span></li>
+        <li class="toc-item level-1"><span>10. Final Evaluation Preparation: Technical Justifications &amp; Viva Defense</span><span>Page 27</span></li>
+    </ul>
+</div>
+
+<!-- SECTION 1: PROJECT OVERVIEW -->
+<div class="page-break">
+    <h1>1. Project Overview</h1>
+    
+    <h2>1.1 Concept &amp; Value Proposition</h2>
+    <p><strong>Vendora</strong> (<em>"Your Campus. Your Community. One Platform."</em>) is a hyper-local, campus-centric digital ecosystem designed to unify fractured university student and faculty interactions into a coherent, high-trust, and sustainable platform.</p>
+    
+    <p>In traditional campus environments, student commerce and services are fragmented across unverified WhatsApp groups, Discord servers, notice boards, and informal scrap dealers. This leads to rampant scams, price exploitation, untracked waste generation, and lost academic resources. Vendora addresses these challenges by combining:</p>
+    <ol>
+        <li><strong>Verified Academic Identity &amp; Role Governance:</strong> A single source of truth for student, faculty, and administrative identities.</li>
+        <li><strong>Circular Peer-to-Peer Marketplace:</strong> Facilitating exchange of second-hand academic textbooks, laboratory equipment, electronics, study furniture, and bicycles.</li>
+        <li><strong>Campus Circular Economy &amp; Scrap Hub:</strong> Facilitating recyclable paper/cardboard/e-waste pickups and zero-cost item giveaways.</li>
+        <li><strong>Idempotent Financial Settlement Engine:</strong> Providing auditable, transparent simulated financial transactions.</li>
+        <li><strong>Operational Facilities &amp; Administrative Workflows:</strong> Student representative verification, staff assignment, and maintenance workflows.</li>
+    </ol>
+    
+    <pre><code>       +-------------------------------------------------------------+
+       |                           VENDORA                           |
+       |             Hyper-Local Campus Digital Ecosystem            |
+       +-------------------------------------------------------------+
+                                      |
+         +----------------------------+----------------------------+
+         |                            |                            |
+         v                            v                            v
++------------------+         +------------------+         +------------------+
+| Campus Commerce  |         | Circular Economy |         | Trust &amp; Identity |
+|  &amp; Marketplace   |         |    &amp; Scrap Hub   |         |    Governance    |
++------------------+         +------------------+         +------------------+
+| • Used Textbooks |         | • Paper / E-Waste|         | • Verified .edu  |
+| • Lab Drafters   |         | • Free Giveaways |         | • RBAC &amp; Reps    |
+| • P2P In-App Chat|         | • Staff Pickups  |         | • Gateway Auth   |
+| • Purchase Bids  |         | • Material Weight|         | • Audit Logging  |
++------------------+         +------------------+         +------------------+</code></pre>
+
+    <h2>1.2 Core Project Objectives</h2>
+    <ul>
+        <li><strong>Zero-Trust Perimeter Security:</strong> Authenticate every request at the perimeter gateway while keeping internal services loosely coupled and lightweight.</li>
+        <li><strong>Resource Reusability &amp; Affordability:</strong> Lower textbook and laboratory kit costs for junior engineering and university students by 50–70% through peer resale.</li>
+        <li><strong>Campus Sustainability:</strong> Divert recyclable paper (registers, notebooks, exams) and electronic waste away from general landfills into structured recycling streams.</li>
+        <li><strong>Microservices Isolation:</strong> Ensure independent scalability, deployment, and technology flexibility across domain modules while retaining a pragmatic database design for MVP evaluation.</li>
+    </ul>
+
+    <h2>1.3 Target Users &amp; Role Taxonomy</h2>
+    <p>The platform's role-based access control (RBAC) model defines explicit privileges across domain operations:</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 25%;">Role Identifier</th>
+                <th>Description &amp; Access Scope</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>STUDENT</code></td>
+                <td>Default authenticated campus user. Can browse/publish listings, submit purchase offers, engage in P2P chats, request scrap pickups, claim giveaways, and apply for representative status.</td>
+            </tr>
+            <tr>
+                <td><code>FACULTY</code></td>
+                <td>Verified academic staff. Same baseline commerce access as students, with priority tagging for research and curriculum-aligned course literature.</td>
+            </tr>
+            <tr>
+                <td><code>ADMIN</code></td>
+                <td>Institutional administrator. Full system visibility: manages user accounts (status activation/suspension), reviews representative applications, assigns scrap staff, and audits payment logs.</td>
+            </tr>
+            <tr>
+                <td><code>MAINTENANCE_STAFF</code></td>
+                <td>Campus physical facility staff. Assigned to maintenance and facilities resolution (Helpdesk module).</td>
+            </tr>
+            <tr>
+                <td><code>COLLECTION_STAFF</code></td>
+                <td>Logistics/waste coordination personnel. Assigned to scrap pickup requests, updates collection statuses (<code>ASSIGNED</code> &rarr; <code>WEIGHED</code> &rarr; <code>COMPLETED</code>).</td>
+            </tr>
+            <tr>
+                <td><code>APP_REPRESENTATIVE</code></td>
+                <td>Specially authorized student liaisons (e.g., hostel wing or branch coordinators) who bridge administrative approvals and moderate local listings.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- SECTION 2: SYSTEM ARCHITECTURE -->
+<div class="page-break">
+    <h1>2. System Architecture</h1>
+    <p>Vendora is architected as a distributed, cloud-native microservices ecosystem utilizing the Spring Boot and Spring Cloud stacks.</p>
+    
+    <div class="mermaid-container">
+        <div class="mermaid">
+graph TD
+    Client["Client Applications (Web / Mobile / Postman)"]
+    Gateway["Vendora API Gateway (:8080)<br/>Perimeter Security & Routing"]
+    Eureka["Vendora Eureka Server (:8761)<br/>Service Registry & Discovery"]
+
+    Client --> Gateway
+    Gateway -.-> Eureka
+
+    Auth["Vendora Auth Service (:8082)<br/>Login & Token Validation"]
+    User["Vendora User Service (:8081)<br/>Profiles & Registration"]
+    Market["Vendora Marketplace Service (:8083)<br/>Listings, Bids & P2P Chat"]
+    Scrap["Vendora Scrap Service (:8085)<br/>Recyclables & Giveaways"]
+    Payment["Vendora Payment Service (:8086)<br/>Idempotent Transactions"]
+
+    Gateway --> Auth
+    Gateway --> User
+    Gateway --> Market
+    Gateway --> Scrap
+    Gateway --> Payment
+
+    Auth -.->|Feign Client: /internal/users/auth-details| User
+
+    DB[("MySQL Database: vendora_db (:3306)<br/>Consolidated Logical Schema")]
+
+    User --> DB
+    Market --> DB
+    Scrap --> DB
+    Payment --> DB
+        </div>
+    </div>
+    
+    <h2>2.1 Microservices Roster &amp; Runtime Topology</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Service Artifact</th>
+                <th style="width: 10%; text-align: center;">Port</th>
+                <th>Tech Stack</th>
+                <th>Primary Responsibilities</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong><code>vendora-eureka-server</code></strong></td>
+                <td style="text-align: center;"><code>8761</code></td>
+                <td>Spring Cloud Netflix Eureka Server</td>
+                <td>Service registry, continuous heartbeat monitoring, and instance metadata management.</td>
+            </tr>
+            <tr>
+                <td><strong><code>vendora-api-gateway</code></strong></td>
+                <td style="text-align: center;"><code>8080</code></td>
+                <td>Spring Cloud Gateway (Reactive WebFlux), Spring Security, JJWT 0.12.6</td>
+                <td>Single public perimeter reverse proxy, cryptographic JWT validation, token stripping, header forwarding, CORS handling, centralized Swagger aggregator.</td>
+            </tr>
+            <tr>
+                <td><strong><code>vendora-auth-service</code></strong></td>
+                <td style="text-align: center;"><code>8082</code></td>
+                <td>Spring Web MVC, OpenFeign, JJWT 0.12.6, BCrypt</td>
+                <td>User authentication, credential validation via Feign, stateless JWT issuance, token claims inspection. <strong>Stateless (No Direct Database Connection)</strong>.</td>
+            </tr>
+            <tr>
+                <td><strong><code>vendora-user-service</code></strong></td>
+                <td style="text-align: center;"><code>8081</code></td>
+                <td>Spring Web MVC, Spring Data JPA, Hibernate, BCrypt</td>
+                <td>User registration, password hashing, identity profile management, representative application lifecycle, protected internal auth endpoints.</td>
+            </tr>
+            <tr>
+                <td><strong><code>vendora-marketplace-service</code></strong></td>
+                <td style="text-align: center;"><code>8083</code></td>
+                <td>Spring Web MVC, Spring Data JPA, Hibernate</td>
+                <td>Second-hand listings, category filtering, keyword search, buyer-to-seller request workflows, in-app P2P chat messages.</td>
+            </tr>
+            <tr>
+                <td><strong><code>vendora-scrap-service</code></strong></td>
+                <td style="text-align: center;"><code>8085</code></td>
+                <td>Spring Web MVC, Spring Data JPA, Hibernate</td>
+                <td>Physical scrap collection scheduling, staff assignment, material weighing lifecycle, free item giveaways, interest claims, giveaway public discussion.</td>
+            </tr>
+            <tr>
+                <td><strong><code>vendora-payment-service</code></strong></td>
+                <td style="text-align: center;"><code>8086</code></td>
+                <td>Spring Web MVC, Spring Data JPA, Hibernate</td>
+                <td>Financial transaction tracking, simulation engine, UUID-based idempotency replay protection, reference resolution.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>2.2 Security Architecture &amp; Perimeter Header Propagation</h2>
+    <p>Vendora implements a <strong>Zero-Trust Perimeter</strong> security model:</p>
+    <ol>
+        <li><strong>Client Request:</strong> The client sends an HTTP request containing an <code>Authorization: Bearer &lt;JWT&gt;</code> header to the API Gateway (<code>:8080</code>).</li>
+        <li><strong>Gateway Interception:</strong> The Gateway's <code>JwtAuthenticationFilter</code> (executing at <code>Ordered.HIGHEST_PRECEDENCE (-1)</code>) intercepts the call:
+            <ul>
+                <li>Verifies if the request matches public routes (e.g., <code>/api/registration/register</code>, <code>/api/auth/login</code>, Actuator, Swagger UI).</li>
+                <li>If protected, extracts the Bearer token and verifies the HMAC-SHA256 signature using the shared secret (<code>VmVuZG9yYUxvY2FsSnd0U2VjcmV0S2V5MzJCeXRlcyE=</code>).</li>
+                <li>Extracts subject (<code>userId</code>), <code>email</code>, and <code>role</code> claims.</li>
+            </ul>
+        </li>
+        <li><strong>Header Sanitization &amp; Injection (Anti-Spoofing):</strong>
+            <ul>
+                <li>The Gateway explicitly strips any client-provided <code>X-User-Id</code>, <code>X-User-Email</code>, or <code>X-User-Role</code> headers to prevent identity spoofing.</li>
+                <li>It mutates the downstream request by injecting trusted headers directly from verified claims:
+                    <br/><code>X-User-Id: &lt;id&gt;</code>, <code>X-User-Email: &lt;email&gt;</code>, <code>X-User-Role: &lt;role&gt;</code>.</li>
+            </ul>
+        </li>
+        <li><strong>Downstream Consumption:</strong> Microservices (<code>user-service</code>, <code>marketplace-service</code>, <code>scrap-service</code>, <code>payment-service</code>) read the <code>X-User-*</code> headers to enforce role and ownership checks without re-parsing or querying the database for identity verification.</li>
+    </ol>
+
+    <div class="mermaid-container">
+        <div class="mermaid">
+sequenceDiagram
+    autonumber
+    actor Client as Client / Mobile App
+    participant Gateway as API Gateway (:8080)
+    participant Auth as Auth Service (:8082)
+    participant Downstream as Downstream Microservice
+
+    Client->>Gateway: POST /api/auth/login {email, password}
+    Gateway->>Auth: Route to Auth Service
+    Auth-->>Gateway: Return 200 OK + JWT Bearer Token
+    Gateway-->>Client: 200 OK + Bearer Token
+    
+    Client->>Gateway: POST /api/listings {title, price...}<br/>Headers: [Authorization: Bearer token, Spoofed X-User-Id: 99]
+    Note over Gateway: 1. Validate JWT signature & expiration<br/>2. Extract claims (sub=2, role=STUDENT)<br/>3. Strip incoming X-User-* headers<br/>4. Inject verified X-User-Id: 2, X-User-Role: STUDENT
+    Gateway->>Downstream: Forward mutated request
+    Note over Downstream: Enforce ownerId = X-User-Id (2)
+    Downstream-->>Gateway: 201 Created
+    Gateway-->>Client: 201 Created
+        </div>
+    </div>
+
+    <h2>2.3 Inter-Service Communication: Auth &harr; User Service</h2>
+    <p><code>vendora-auth-service</code> has no direct database connection. When a user logs in:</p>
+    <ol>
+        <li><code>vendora-auth-service</code> receives <code>LoginRequest(email, password)</code>.</li>
+        <li>It invokes <code>UserServiceClient</code> (Spring Cloud OpenFeign), which makes an HTTP GET request to <code>http://VENDORA-USER-SERVICE/internal/users/auth-details?email=...</code>.</li>
+        <li>The request includes a shared internal secret header: <code>X-Service-Secret: VendoraLocalInternalSecret2026</code>.</li>
+        <li><code>InternalAuthController</code> in <code>vendora-user-service</code> validates the secret:
+            <ul>
+                <li>If invalid/missing, returns <code>403 Forbidden</code>.</li>
+                <li>If valid, fetches the user by email, returns <code>AuthUserDetailsResponse</code> containing <code>id</code>, <code>email</code>, <code>passwordHash</code>, <code>role</code>, and <code>accountStatus</code>.</li>
+            </ul>
+        </li>
+        <li><code>vendora-auth-service</code> compares raw credentials using <code>BCryptPasswordEncoder.matches()</code>, verifies <code>accountStatus == ACTIVE</code>, and issues the signed JWT.</li>
+    </ol>
+</div>
+<!-- SECTION 3: IMPLEMENTATION STATUS -->
+<div class="page-break">
+    <h1>3. Implementation Status: Service-by-Service Breakdown</h1>
+    <p>To provide total clarity on what is actually written in the codebase versus what was conceptualized, this section outlines the current state across all modules:</p>
+    
+    <pre><code>+-------------------------------------------------------------------------+
+|                  VENDORA IMPLEMENTATION HEALTH MATRIX                   |
++-------------------------------------------------------------------------+
+| Module / Capability     | Status       | Production Gap                 |
++-------------------------+--------------+--------------------------------+
+| Service Registry        | COMPLETED    | Needs multi-node peer replica  |
+| API Gateway Security    | COMPLETED    | Rate limiting &amp; Circuit breaker|
+| Auth Service            | COMPLETED    | Refresh token &amp; password reset |
+| User Service            | COMPLETED    | Email verification &amp; ID upload |
+| Marketplace Service     | COMPLETED    | S3 image upload &amp; pagination   |
+| Scrap Service           | COMPLETED    | Dynamic pricing &amp; staff geo    |
+| Payment Service         | COMPLETED    | Mock simulation -&gt; Razorpay    |
+| Helpdesk Service        | NOT STARTED  | Entire microservice missing    |
+| Frontend Client         | NOT STARTED  | UI Web / Mobile application    |
++-------------------------------------------------------------------------+</code></pre>
+
+    <h2>3.1 vendora-eureka-server (:8761)</h2>
+    <p><span class="badge badge-completed">COMPLETED</span></p>
+    <ul>
+        <li><strong>Artifact:</strong> <code>vendora-eureka-server-0.0.1-SNAPSHOT</code></li>
+        <li><strong>Configuration:</strong> Configured as standalone Eureka Server (<code>register-with-eureka: false</code>, <code>fetch-registry: false</code>).</li>
+        <li><strong>Health Actuator:</strong> Exposed at <code>/actuator/health</code>.</li>
+        <li><strong>Testing:</strong> Automated test <code>VendoraEurekaServerApplicationTests.contextLoads()</code> passing.</li>
+    </ul>
+
+    <h2>3.2 vendora-api-gateway (:8080)</h2>
+    <p><span class="badge badge-completed">COMPLETED</span></p>
+    <ul>
+        <li><strong>Core Technology:</strong> Reactive Spring Cloud Gateway (WebFlux), Spring Security, JJWT.</li>
+        <li><strong>Implemented Features:</strong>
+            <ul>
+                <li>Dynamic route discovery via Eureka (<code>lb://VENDORA-*</code>).</li>
+                <li>Perimeter Global Filter: <code>JwtAuthenticationFilter</code> with public endpoint bypass.</li>
+                <li>Header stripping and trusted claim injection (<code>X-User-Id</code>, <code>X-User-Email</code>, <code>X-User-Role</code>).</li>
+                <li>Global CORS handling for frontend origins.</li>
+                <li>Centralized OpenAPI / Swagger UI aggregator (<code>/swagger-ui.html</code> aggregating endpoints from all 5 downstream services).</li>
+            </ul>
+        </li>
+        <li><strong>Testing:</strong> <code>JwtServiceTest</code> (2 unit tests) and <code>VendoraApiGatewayApplicationTests</code> passing.</li>
+    </ul>
+
+    <h2>3.3 vendora-auth-service (:8082)</h2>
+    <p><span class="badge badge-completed">COMPLETED</span></p>
+    <ul>
+        <li><strong>Core Technology:</strong> Spring Web MVC, OpenFeign, JJWT 0.12.6, BCrypt.</li>
+        <li><strong>Implemented Features:</strong>
+            <ul>
+                <li>Login endpoint (<code>POST /api/auth/login</code>): BCrypt authentication via Feign, returns JWT access token (1-hour expiration).</li>
+                <li>Token validation endpoint (<code>GET /api/auth/validate</code>): Returns verification status and extracted claims.</li>
+                <li>Zero-database dependency architecture (stateless worker).</li>
+            </ul>
+        </li>
+        <li><strong>Testing:</strong> <code>AuthServiceTest</code> (8 unit tests with Mockito) passing.</li>
+    </ul>
+
+    <h2>3.4 vendora-user-service (:8081)</h2>
+    <p><span class="badge badge-completed">COMPLETED</span></p>
+    <ul>
+        <li><strong>Core Technology:</strong> Spring Web MVC, Spring Data JPA, Hibernate, MySQL Driver, BCrypt.</li>
+        <li><strong>Implemented Features:</strong>
+            <ul>
+                <li>User registration (<code>POST /api/registration/register</code>): Unique email and registration number checks, BCrypt hashing, default <code>ACTIVE</code> status.</li>
+                <li>User profile endpoints (<code>GET /api/users/profile</code>, <code>PUT /api/users/profile</code>, <code>GET /api/users/{id}</code>).</li>
+                <li>Account status administration (<code>PATCH /api/users/{id}/status</code>): Restricted to <code>ADMIN</code>.</li>
+                <li>Representative lifecycle (<code>/api/users/representative/apply</code>, <code>/status</code>, <code>/all</code>, <code>/{id}/status</code>): Allows students to apply for campus representative roles, with admin approval/rejection.</li>
+                <li>Protected internal authentication endpoint (<code>/internal/users/auth-details</code>) for Auth Service.</li>
+            </ul>
+        </li>
+        <li><strong>Testing:</strong> <code>UserServiceTest</code> (9 unit tests) and <code>RepresentativeServiceTest</code> (8 unit tests) passing.</li>
+    </ul>
+
+    <h2>3.5 vendora-marketplace-service (:8083)</h2>
+    <p><span class="badge badge-completed">COMPLETED</span></p>
+    <ul>
+        <li><strong>Core Technology:</strong> Spring Web MVC, Spring Data JPA, Hibernate, MySQL Driver.</li>
+        <li><strong>Implemented Features:</strong>
+            <ul>
+                <li>Listing CRUD (<code>POST /api/listings</code>, <code>GET /api/listings</code>, <code>GET /api/listings/{id}</code>, <code>PUT /api/listings/{id}</code>, <code>DELETE /api/listings/{id}</code>).</li>
+                <li>Search &amp; Filtering (<code>/api/listings/search?keyword=...</code>, <code>/api/listings/category/{category}</code>, <code>/api/listings/seller/{sellerId}</code>).</li>
+                <li>Listing lifecycle management (<code>AVAILABLE</code>, <code>RESERVED</code>, <code>SOLD</code>).</li>
+                <li>Buyer-Seller offer workflow (<code>POST /api/listings/{id}/requests</code>, <code>/api/listings/requests/my</code>, seller review, accept, reject, cancel).</li>
+                <li>In-App peer-to-peer chat system (<code>/api/listings/conversations/start</code>, <code>/my</code>, <code>/{id}/messages</code>).</li>
+                <li>Strict seller ownership checks on update, status change, and deletion.</li>
+            </ul>
+        </li>
+        <li><strong>Testing:</strong> <code>ListingServiceTest</code> (5 unit tests), <code>MarketplaceRequestServiceTest</code> (4 unit tests), <code>ChatServiceTest</code> (4 unit tests) passing.</li>
+    </ul>
+
+    <h2>3.6 vendora-scrap-service (:8085)</h2>
+    <p><span class="badge badge-completed">COMPLETED</span></p>
+    <ul>
+        <li><strong>Core Technology:</strong> Spring Web MVC, Spring Data JPA, Hibernate, MySQL Driver.</li>
+        <li><strong>Implemented Features:</strong>
+            <ul>
+                <li>Physical scrap collection request submission (<code>POST /api/scrap</code>): Accepts material type (<code>PAPER</code>, <code>PLASTIC</code>, <code>METAL</code>, <code>E_WASTE</code>, <code>GLASS</code>, <code>OTHER</code>), quantity, unit, pickup location, and preferred time.</li>
+                <li>Scrap lifecycle management: Admin staff assignment (<code>PATCH /api/scrap/{id}/assign</code>), collector status updates (<code>REQUESTED</code>, <code>ASSIGNED</code>, <code>IN_PROGRESS</code>, <code>WEIGHED</code>, <code>COMPLETED</code>, <code>CANCELLED</code>).</li>
+                <li>Campus Free Giveaways (<code>/api/giveaways</code>): Students list zero-cost items (<code>OPEN</code>, <code>CLAIMED</code>, <code>CANCELLED</code>).</li>
+                <li>Giveaway Interest Workflow: Prospective recipients apply with a statement/reason; owners review and accept winners (<code>PATCH .../accept</code>).</li>
+                <li>Public discussion messages on giveaways (<code>POST /api/giveaways/{id}/messages</code>).</li>
+            </ul>
+        </li>
+        <li><strong>Testing:</strong> <code>ScrapServiceTest</code> (6 unit tests) and <code>GiveawayServiceTest</code> (5 unit tests) passing.</li>
+    </ul>
+
+    <h2>3.7 vendora-payment-service (:8086)</h2>
+    <p><span class="badge badge-completed">COMPLETED</span></p>
+    <ul>
+        <li><strong>Core Technology:</strong> Spring Web MVC, Spring Data JPA, Hibernate, MySQL Driver.</li>
+        <li><strong>Implemented Features:</strong>
+            <ul>
+                <li>Idempotent payment recording (<code>POST /api/payments</code>): Supports <code>Idempotency-Key</code> header or request body; prevents double charges on retry by returning existing records.</li>
+                <li>Automatic transaction reference generation (<code>TXN-YYYYMMDD-XXXXXX</code>).</li>
+                <li>Query transactions by ID, reference, buyer, seller, or admin overview.</li>
+                <li>Transaction lifecycle simulation (<code>PATCH /api/payments/{id}/status?status=REFUNDED</code>).</li>
+            </ul>
+        </li>
+        <li><strong>Testing:</strong> <code>PaymentServiceTest</code> (5 unit tests) and <code>VendoraPaymentServiceApplicationTests</code> passing.</li>
+    </ul>
+
+    <h2>3.8 vendora-helpdesk-service (:8084)</h2>
+    <p><span class="badge badge-notstarted">NOT STARTED</span></p>
+    <ul>
+        <li><strong>Details:</strong> Conceptualized for campus facility tickets (hostel electrical, plumbing, lab equipment repair). Not yet created in codebase to allow full focus on commerce and circular sustainability MVP modules.</li>
+    </ul>
+</div>
+
+<!-- SECTION 4: DATABASE DESIGN & ERD -->
+<div class="page-break">
+    <h1>4. Database Design &amp; Entity Relationship Architecture</h1>
+    
+    <h2>4.1 Database Architecture: The Consolidated Schema Strategy</h2>
+    <p>Vendora utilizes a <strong>Single Consolidated MySQL Database Schema</strong> named <code>vendora_db</code> running on port <code>3306</code>.</p>
+    
+    <h3>Architectural Rationale &amp; Trade-off Analysis</h3>
+    <p>In pure microservices theory, each service owns an isolated physical database (Database-per-Service pattern). For the Vendora MVP, a <strong>pragmatic shared-schema with strict logical boundaries</strong> was implemented:</p>
+    <ul>
+        <li><strong>Operational Simplicity:</strong> Eliminates the overhead of configuring, hosting, and migrating 5 separate database servers in a campus development or evaluator environment.</li>
+        <li><strong>Logical Data Independence:</strong> Although tables coexist in <code>vendora_db</code>, <strong>no microservice shares JPA entity models or repository classes</strong>. Cross-service references are stored purely as scalar IDs (<code>sellerId</code>, <code>buyerId</code>, <code>ownerId</code>, <code>userId</code>, <code>listingId</code>).</li>
+        <li><strong>Zero Cross-Service Table Joins:</strong> Services access data strictly through REST APIs and Gateway tokens, never via SQL joins across service domains.</li>
+    </ul>
+
+    <h2>4.2 Entity Relationship Diagram (ERD)</h2>
+    <div class="mermaid-container">
+        <div class="mermaid">
+erDiagram
+    USERS {
+        bigint id PK
+        string full_name
+        string email
+        string password_hash
+        string phone
+        string registration_number
+        string role
+        string account_status
+        datetime created_at
+        datetime updated_at
+    }
+    APP_REPRESENTATIVES {
+        bigint id PK
+        bigint user_id
+        string approval_status
+        bigint approved_by
+        datetime approved_at
+        string reason
+        datetime created_at
+    }
+    LISTINGS {
+        bigint id PK
+        bigint seller_id
+        string title
+        string description
+        decimal price
+        int quantity
+        string category
+        string condition
+        string status
+        string image_url
+        datetime created_at
+        datetime updated_at
+    }
+    MARKETPLACE_REQUESTS {
+        bigint id PK
+        bigint listing_id
+        bigint buyer_id
+        int requested_quantity
+        string message
+        string status
+        datetime created_at
+        datetime updated_at
+    }
+    CONVERSATIONS {
+        bigint id PK
+        bigint listing_id
+        bigint buyer_id
+        bigint seller_id
+        datetime created_at
+    }
+    MESSAGES {
+        bigint id PK
+        bigint conversation_id
+        bigint sender_id
+        string message
+        datetime sent_at
+    }
+    SCRAP_REQUESTS {
+        bigint id PK
+        bigint user_id
+        string material_type
+        string description
+        decimal estimated_quantity
+        string quantity_unit
+        string pickup_location
+        datetime preferred_pickup_time
+        bigint assigned_staff_id
+        string status
+        datetime created_at
+        datetime updated_at
+    }
+    GIVEAWAYS {
+        bigint id PK
+        bigint owner_id
+        string title
+        string description
+        string category
+        string status
+        datetime created_at
+        datetime updated_at
+    }
+    GIVEAWAY_INTERESTS {
+        bigint id PK
+        bigint giveaway_id
+        bigint user_id
+        string message
+        string status
+        datetime created_at
+    }
+    GIVEAWAY_MESSAGES {
+        bigint id PK
+        bigint giveaway_id
+        bigint sender_id
+        string message
+        datetime created_at
+    }
+    PAYMENTS {
+        bigint id PK
+        string transaction_reference
+        string idempotency_key
+        string reference_type
+        bigint reference_id
+        bigint buyer_id
+        bigint seller_id
+        bigint listing_id
+        decimal amount
+        string currency
+        string payment_method
+        string payment_status
+        string description
+        datetime created_at
+        datetime updated_at
+    }
+
+    USERS ||--o{ APP_REPRESENTATIVES : applies_for
+    USERS ||--o{ LISTINGS : publishes
+    USERS ||--o{ MARKETPLACE_REQUESTS : submits
+    USERS ||--o{ CONVERSATIONS : participates
+    USERS ||--o{ SCRAP_REQUESTS : schedules
+    USERS ||--o{ GIVEAWAYS : donates
+    USERS ||--o{ PAYMENTS : executes
+
+    LISTINGS ||--o{ MARKETPLACE_REQUESTS : receives
+    LISTINGS ||--o{ CONVERSATIONS : context_for
+    CONVERSATIONS ||--o{ MESSAGES : contains
+
+    GIVEAWAYS ||--o{ GIVEAWAY_INTERESTS : receives
+    GIVEAWAYS ||--o{ GIVEAWAY_MESSAGES : discussion_on
+        </div>
+    </div>
+
+    <h2>4.3 Data Dictionary &amp; Constraints</h2>
+    
+    <h3>Table: <code>users</code> (Owner: <code>vendora-user-service</code>)</h3>
+    <ul>
+        <li><code>id</code> (BIGINT, PK, AUTO_INCREMENT)</li>
+        <li><code>full_name</code> (VARCHAR(150), NOT NULL)</li>
+        <li><code>email</code> (VARCHAR(150), UNIQUE, NOT NULL)</li>
+        <li><code>phone</code> (VARCHAR(20), NULL)</li>
+        <li><code>registration_number</code> (VARCHAR(50), UNIQUE, NULL)</li>
+        <li><code>password_hash</code> (VARCHAR(255), NOT NULL) &mdash; Stored using Spring Security BCrypt</li>
+        <li><code>role</code> (VARCHAR(40), NOT NULL) &mdash; Enum: <code>STUDENT</code>, <code>FACULTY</code>, <code>ADMIN</code>, <code>MAINTENANCE_STAFF</code>, <code>COLLECTION_STAFF</code>, <code>APP_REPRESENTATIVE</code></li>
+        <li><code>account_status</code> (VARCHAR(30), NOT NULL) &mdash; Enum: <code>ACTIVE</code>, <code>SUSPENDED</code></li>
+        <li><code>created_at</code>, <code>updated_at</code> (DATETIME)</li>
+    </ul>
+
+    <h3>Table: <code>app_representatives</code> (Owner: <code>vendora-user-service</code>)</h3>
+    <ul>
+        <li><code>id</code> (BIGINT, PK, AUTO_INCREMENT)</li>
+        <li><code>user_id</code> (BIGINT, UNIQUE, NOT NULL) &mdash; Scalar reference to <code>users.id</code></li>
+        <li><code>approval_status</code> (VARCHAR(30), NOT NULL) &mdash; <code>PENDING</code>, <code>APPROVED</code>, <code>REJECTED</code></li>
+        <li><code>approved_by</code> (BIGINT, NULL) &mdash; Admin user ID</li>
+        <li><code>approved_at</code> (DATETIME, NULL)</li>
+        <li><code>reason</code> (VARCHAR(500), NULL) &mdash; Applicant's statement of intent</li>
+        <li><code>created_at</code> (DATETIME)</li>
+    </ul>
+
+    <h3>Table: <code>listings</code> (Owner: <code>vendora-marketplace-service</code>)</h3>
+    <ul>
+        <li><code>id</code> (BIGINT, PK, AUTO_INCREMENT)</li>
+        <li><code>seller_id</code> (BIGINT, NOT NULL) &mdash; Injected from verified <code>X-User-Id</code></li>
+        <li><code>title</code> (VARCHAR(200), NOT NULL)</li>
+        <li><code>description</code> (TEXT, NULL)</li>
+        <li><code>price</code> (DECIMAL(12,2), NOT NULL, &ge; 0)</li>
+        <li><code>quantity</code> (INT, NOT NULL, &ge; 1)</li>
+        <li><code>category</code> (VARCHAR(100), NOT NULL) &mdash; Enum: <code>BOOKS</code>, <code>ELECTRONICS</code>, <code>STATIONERY</code>, <code>FURNITURE</code>, <code>CYCLES</code>, <code>OTHER</code></li>
+        <li><code>condition</code> (VARCHAR(50), NOT NULL) &mdash; Enum: <code>NEW</code>, <code>LIKE_NEW</code>, <code>GOOD</code>, <code>FAIR</code></li>
+        <li><code>status</code> (VARCHAR(30), NOT NULL) &mdash; Enum: <code>AVAILABLE</code>, <code>RESERVED</code>, <code>SOLD</code></li>
+        <li><code>image_url</code> (VARCHAR(500), NULL)</li>
+        <li><code>created_at</code>, <code>updated_at</code> (DATETIME)</li>
+    </ul>
+
+    <h3>Table: <code>marketplace_requests</code> (Owner: <code>vendora-marketplace-service</code>)</h3>
+    <ul>
+        <li><code>id</code> (BIGINT, PK, AUTO_INCREMENT)</li>
+        <li><code>listing_id</code> (BIGINT, NOT NULL) &mdash; Reference to <code>listings.id</code></li>
+        <li><code>buyer_id</code> (BIGINT, NOT NULL) &mdash; Scalar reference to buyer <code>users.id</code></li>
+        <li><code>requested_quantity</code> (INT, NOT NULL, &ge; 1)</li>
+        <li><code>message</code> (TEXT, NULL)</li>
+        <li><code>status</code> (VARCHAR(30), NOT NULL) &mdash; Enum: <code>PENDING</code>, <code>ACCEPTED</code>, <code>REJECTED</code>, <code>CANCELLED</code></li>
+        <li><code>created_at</code>, <code>updated_at</code> (DATETIME)</li>
+    </ul>
+
+    <h3>Table: <code>conversations</code> (Owner: <code>vendora-marketplace-service</code>)</h3>
+    <ul>
+        <li><code>id</code> (BIGINT, PK, AUTO_INCREMENT)</li>
+        <li><code>listing_id</code> (BIGINT, NOT NULL)</li>
+        <li><code>buyer_id</code> (BIGINT, NOT NULL)</li>
+        <li><code>seller_id</code> (BIGINT, NOT NULL)</li>
+        <li><code>created_at</code> (DATETIME)</li>
+    </ul>
+
+    <h3>Table: <code>messages</code> (Owner: <code>vendora-marketplace-service</code>)</h3>
+    <ul>
+        <li><code>id</code> (BIGINT, PK, AUTO_INCREMENT)</li>
+        <li><code>conversation_id</code> (BIGINT, NOT NULL) &mdash; Reference to <code>conversations.id</code></li>
+        <li><code>sender_id</code> (BIGINT, NOT NULL) &mdash; Validated against conversation participants</li>
+        <li><code>message</code> (TEXT, NOT NULL)</li>
+        <li><code>sent_at</code> (DATETIME)</li>
+    </ul>
+
+    <h3>Table: <code>scrap_requests</code> (Owner: <code>vendora-scrap-service</code>)</h3>
+    <ul>
+        <li><code>id</code> (BIGINT, PK, AUTO_INCREMENT)</li>
+        <li><code>user_id</code> (BIGINT, NOT NULL) &mdash; Injected from <code>X-User-Id</code></li>
+        <li><code>material_type</code> (VARCHAR(30), NOT NULL) &mdash; Enum: <code>PAPER</code>, <code>PLASTIC</code>, <code>METAL</code>, <code>E_WASTE</code>, <code>GLASS</code>, <code>OTHER</code></li>
+        <li><code>description</code> (VARCHAR(1000), NULL)</li>
+        <li><code>estimated_quantity</code> (DECIMAL(10,2), NOT NULL, &gt; 0)</li>
+        <li><code>quantity_unit</code> (VARCHAR(20), NOT NULL) &mdash; Enum: <code>KG</code>, <code>PIECES</code>, <code>BOXES</code></li>
+        <li><code>pickup_location</code> (VARCHAR(500), NOT NULL)</li>
+        <li><code>preferred_pickup_time</code> (DATETIME, NULL)</li>
+        <li><code>assigned_staff_id</code> (BIGINT, NULL) &mdash; Admin assigned collection staff</li>
+        <li><code>status</code> (VARCHAR(30), NOT NULL) &mdash; Enum: <code>REQUESTED</code>, <code>ASSIGNED</code>, <code>IN_PROGRESS</code>, <code>WEIGHED</code>, <code>COMPLETED</code>, <code>CANCELLED</code></li>
+        <li><code>created_at</code>, <code>updated_at</code> (DATETIME)</li>
+    </ul>
+
+    <h3>Table: <code>giveaways</code> (Owner: <code>vendora-scrap-service</code>)</h3>
+    <ul>
+        <li><code>id</code> (BIGINT, PK, AUTO_INCREMENT)</li>
+        <li><code>owner_id</code> (BIGINT, NOT NULL)</li>
+        <li><code>title</code> (VARCHAR(200), NOT NULL)</li>
+        <li><code>description</code> (TEXT, NULL)</li>
+        <li><code>category</code> (VARCHAR(100), NULL)</li>
+        <li><code>status</code> (VARCHAR(30), NOT NULL) &mdash; <code>AVAILABLE</code>, <code>RESERVED</code>, <code>CLAIMED</code>, <code>CANCELLED</code></li>
+        <li><code>created_at</code>, <code>updated_at</code> (DATETIME)</li>
+    </ul>
+
+    <h3>Table: <code>giveaway_interests</code> (Owner: <code>vendora-scrap-service</code>)</h3>
+    <ul>
+        <li><code>id</code> (BIGINT, PK, AUTO_INCREMENT)</li>
+        <li><code>giveaway_id</code> (BIGINT, NOT NULL)</li>
+        <li><code>user_id</code> (BIGINT, NOT NULL)</li>
+        <li><code>message</code> (TEXT, NULL)</li>
+        <li><code>status</code> (VARCHAR(30), NOT NULL) &mdash; <code>PENDING</code>, <code>ACCEPTED</code>, <code>REJECTED</code></li>
+        <li><code>created_at</code> (DATETIME)</li>
+    </ul>
+
+    <h3>Table: <code>giveaway_messages</code> (Owner: <code>vendora-scrap-service</code>)</h3>
+    <ul>
+        <li><code>id</code> (BIGINT, PK, AUTO_INCREMENT)</li>
+        <li><code>giveaway_id</code> (BIGINT, NOT NULL)</li>
+        <li><code>sender_id</code> (BIGINT, NOT NULL)</li>
+        <li><code>message</code> (TEXT, NOT NULL)</li>
+        <li><code>created_at</code> (DATETIME)</li>
+    </ul>
+
+    <h3>Table: <code>payments</code> (Owner: <code>vendora-payment-service</code>)</h3>
+    <ul>
+        <li><code>id</code> (BIGINT, PK, AUTO_INCREMENT)</li>
+        <li><code>transaction_reference</code> (VARCHAR(100), UNIQUE, NOT NULL)</li>
+        <li><code>idempotency_key</code> (VARCHAR(100), UNIQUE, NULL)</li>
+        <li><code>reference_type</code> (VARCHAR(50), NULL) &mdash; <code>LISTING</code>, <code>SCRAP</code>, <code>GENERAL</code></li>
+        <li><code>reference_id</code> (BIGINT, NULL)</li>
+        <li><code>buyer_id</code> (BIGINT, NOT NULL)</li>
+        <li><code>seller_id</code> (BIGINT, NOT NULL)</li>
+        <li><code>listing_id</code> (BIGINT, NULL)</li>
+        <li><code>amount</code> (DECIMAL(12,2), NOT NULL, &gt; 0)</li>
+        <li><code>currency</code> (VARCHAR(10), NOT NULL, Default <code>'INR'</code>)</li>
+        <li><code>payment_method</code> (VARCHAR(50), NOT NULL) &mdash; Enum: <code>UPI</code>, <code>CARD</code>, <code>NET_BANKING</code>, <code>WALLET</code>, <code>CASH</code></li>
+        <li><code>payment_status</code> (VARCHAR(30), NOT NULL) &mdash; Enum: <code>PENDING</code>, <code>SUCCESS</code>, <code>FAILED</code>, <code>REFUNDED</code></li>
+        <li><code>description</code> (VARCHAR(500), NULL)</li>
+        <li><code>created_at</code>, <code>updated_at</code> (DATETIME)</li>
+    </ul>
+</div>
+<!-- SECTION 5: COMPREHENSIVE REST API DOCUMENTATION -->
+<div class="page-break">
+    <h1>5. Comprehensive REST API Documentation</h1>
+    <p>All client requests are directed to the <strong>API Gateway</strong> (<code>http://localhost:8080</code>).</p>
+    
+    <h2>5.1 Authentication Service Endpoints (:8082)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 10%;">Method</th>
+                <th style="width: 22%;">Gateway Path</th>
+                <th style="width: 14%;">Access Level</th>
+                <th style="width: 22%;">Description</th>
+                <th style="width: 16%;">Key Parameters</th>
+                <th style="width: 16%;">Success Response</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong><code>POST</code></strong></td>
+                <td><code>/api/auth/login</code></td>
+                <td>Public</td>
+                <td>Authenticates credentials and returns signed JWT</td>
+                <td>Body: <code>{email, password}</code></td>
+                <td><code>200 OK</code> + <code>{accessToken, tokenType, userId, email, role, expiresIn}</code></td>
+            </tr>
+            <tr>
+                <td><strong><code>GET</code></strong></td>
+                <td><code>/api/auth/validate</code></td>
+                <td>Authenticated</td>
+                <td>Validates JWT token and outputs claims</td>
+                <td>Header: <code>Authorization: Bearer &lt;token&gt;</code></td>
+                <td><code>200 OK</code> + <code>{valid: true, userId, email, role}</code></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>5.2 User &amp; Identity Service Endpoints (:8081)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 10%;">Method</th>
+                <th style="width: 24%;">Gateway Path</th>
+                <th style="width: 14%;">Access Level</th>
+                <th style="width: 22%;">Description</th>
+                <th style="width: 15%;">Key Parameters</th>
+                <th style="width: 15%;">Success Response</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong><code>POST</code></strong></td>
+                <td><code>/api/registration/register</code></td>
+                <td>Public</td>
+                <td>Registers a new student or faculty account</td>
+                <td>Body: <code>{fullName, email, phone, registrationNumber, password}</code></td>
+                <td><code>201 Created</code> + User profile</td>
+            </tr>
+            <tr>
+                <td><strong><code>GET</code></strong></td>
+                <td><code>/api/users/profile</code></td>
+                <td>Authenticated</td>
+                <td>Retrieves current logged-in user profile</td>
+                <td>Injected header: <code>X-User-Id</code></td>
+                <td><code>200 OK</code> + User profile</td>
+            </tr>
+            <tr>
+                <td><strong><code>PUT</code></strong></td>
+                <td><code>/api/users/profile</code></td>
+                <td>Authenticated</td>
+                <td>Updates current user's editable details</td>
+                <td>Body: <code>{fullName, phone}</code></td>
+                <td><code>200 OK</code> + Updated user</td>
+            </tr>
+            <tr>
+                <td><strong><code>GET</code></strong></td>
+                <td><code>/api/users/{id}</code></td>
+                <td>Authenticated</td>
+                <td>Fetches user public profile by ID</td>
+                <td>Path variable: <code>id</code></td>
+                <td><code>200 OK</code> + User profile</td>
+            </tr>
+            <tr>
+                <td><strong><code>PATCH</code></strong></td>
+                <td><code>/api/users/{id}/status</code></td>
+                <td>Admin Only</td>
+                <td>Updates account status (<code>ACTIVE</code>, <code>SUSPENDED</code>)</td>
+                <td>Query: <code>?status=SUSPENDED</code>, Role: <code>ADMIN</code></td>
+                <td><code>200 OK</code> + User profile</td>
+            </tr>
+            <tr>
+                <td><strong><code>POST</code></strong></td>
+                <td><code>/api/users/representative/apply</code></td>
+                <td>Student</td>
+                <td>Submits application for representative role</td>
+                <td>Body: <code>{reason}</code></td>
+                <td><code>201 Created</code> + Application details</td>
+            </tr>
+            <tr>
+                <td><strong><code>GET</code></strong></td>
+                <td><code>/api/users/representative/status</code></td>
+                <td>Student</td>
+                <td>Checks current representative application status</td>
+                <td>Injected header: <code>X-User-Id</code></td>
+                <td><code>200 OK</code> + Application status</td>
+            </tr>
+            <tr>
+                <td><strong><code>GET</code></strong></td>
+                <td><code>/api/users/representative/all</code></td>
+                <td>Admin Only</td>
+                <td>Lists all submitted representative applications</td>
+                <td>Role: <code>ADMIN</code></td>
+                <td><code>200 OK</code> + Application list</td>
+            </tr>
+            <tr>
+                <td><strong><code>PATCH</code></strong></td>
+                <td><code>/api/users/representative/{id}/status</code></td>
+                <td>Admin Only</td>
+                <td>Approves or rejects representative application</td>
+                <td>Query: <code>?status=APPROVED</code>, Role: <code>ADMIN</code></td>
+                <td><code>200 OK</code> + Updated application</td>
+            </tr>
+            <tr>
+                <td><strong><code>GET</code></strong></td>
+                <td><code>/internal/users/auth-details</code></td>
+                <td>Internal</td>
+                <td>Provides auth details to Auth Service</td>
+                <td>Query: <code>email</code>, Header: <code>X-Service-Secret</code></td>
+                <td><code>200 OK</code> + <code>{id, email, passwordHash, role, accountStatus}</code></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>5.3 Marketplace &amp; Commerce Service Endpoints (:8083)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 10%;">Method</th>
+                <th style="width: 25%;">Gateway Path</th>
+                <th style="width: 14%;">Access Level</th>
+                <th style="width: 21%;">Description</th>
+                <th style="width: 15%;">Key Parameters</th>
+                <th style="width: 15%;">Success Response</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong><code>POST</code></strong></td>
+                <td><code>/api/listings</code></td>
+                <td>Authenticated</td>
+                <td>Creates a new marketplace item listing</td>
+                <td>Body: <code>{title, description, price, quantity, category, condition, imageUrl}</code></td>
+                <td><code>201 Created</code> + Listing details</td>
+            </tr>
+            <tr>
+                <td><strong><code>GET</code></strong></td>
+                <td><code>/api/listings</code></td>
+                <td>Public / Auth</td>
+                <td>Retrieves all available marketplace listings</td>
+                <td>None</td>
+                <td><code>200 OK</code> + Array of listings</td>
+            </tr>
+            <tr>
+                <td><strong><code>GET</code></strong></td>
+                <td><code>/api/listings/{id}</code></td>
+                <td>Public / Auth</td>
+                <td>Fetches a specific listing by ID</td>
+                <td>Path variable: <code>id</code></td>
+                <td><code>200 OK</code> + Listing details</td>
+            </tr>
+            <tr>
+                <td><strong><code>GET</code></strong></td>
+                <td><code>/api/listings/seller/{sellerId}</code></td>
+                <td>Authenticated</td>
+                <td>Retrieves listings published by a specific seller</td>
+                <td>Path variable: <code>sellerId</code></td>
+                <td><code>200 OK</code> + Array of listings</td>
+            </tr>
+            <tr>
+                <td><strong><code>GET</code></strong></td>
+                <td><code>/api/listings/search</code></td>
+                <td>Authenticated</td>
+                <td>Keyword search on listing titles and descriptions</td>
+                <td>Query: <code>?keyword=textbook</code></td>
+                <td><code>200 OK</code> + Matching listings</td>
+            </tr>
+            <tr>
+                <td><strong><code>GET</code></strong></td>
+                <td><code>/api/listings/category/{category}</code></td>
+                <td>Authenticated</td>
+                <td>Filters catalog by category (<code>BOOKS</code>, etc.)</td>
+                <td>Path variable: <code>category</code></td>
+                <td><code>200 OK</code> + Filtered listings</td>
+            </tr>
+            <tr>
+                <td><strong><code>PUT</code></strong></td>
+                <td><code>/api/listings/{id}</code></td>
+                <td>Seller Only</td>
+                <td>Updates an existing listing</td>
+                <td>Body: <code>{title, description, price...}</code></td>
+                <td><code>200 OK</code> + Updated listing</td>
+            </tr>
+            <tr>
+                <td><strong><code>PATCH</code></strong></td>
+                <td><code>/api/listings/{id}/status</code></td>
+                <td>Seller Only</td>
+                <td>Updates listing status (<code>AVAILABLE</code>, <code>SOLD</code>)</td>
+                <td>Query: <code>?status=SOLD</code></td>
+                <td><code>200 OK</code> + Updated listing</td>
+            </tr>
+            <tr>
+                <td><strong><code>DELETE</code></strong></td>
+                <td><code>/api/listings/{id}</code></td>
+                <td>Seller Only</td>
+                <td>Deletes/withdraws a listing from marketplace</td>
+                <td>Path variable: <code>id</code></td>
+                <td><code>204 No Content</code></td>
+            </tr>
+            <tr>
+                <td><strong><code>POST</code></strong></td>
+                <td><code>/api/listings/{listingId}/requests</code></td>
+                <td>Buyer</td>
+                <td>Submits purchase offer/request for a listing</td>
+                <td>Body: <code>{requestedQuantity, message}</code></td>
+                <td><code>201 Created</code> + Request object</td>
+            </tr>
+            <tr>
+                <td><strong><code>GET</code></strong></td>
+                <td><code>/api/listings/{listingId}/requests</code></td>
+                <td>Seller Only</td>
+                <td>Seller reviews purchase requests on listing</td>
+                <td>Path variable: <code>listingId</code></td>
+                <td><code>200 OK</code> + Request list</td>
+            </tr>
+            <tr>
+                <td><strong><code>GET</code></strong></td>
+                <td><code>/api/listings/requests/my</code></td>
+                <td>Buyer</td>
+                <td>Buyer reviews all submitted purchase requests</td>
+                <td>Injected header: <code>X-User-Id</code></td>
+                <td><code>200 OK</code> + Array of requests</td>
+            </tr>
+            <tr>
+                <td><strong><code>PATCH</code></strong></td>
+                <td><code>/api/listings/requests/{id}/status</code></td>
+                <td>Seller Only</td>
+                <td>Seller accepts or rejects buyer offer</td>
+                <td>Query: <code>?status=ACCEPTED</code></td>
+                <td><code>200 OK</code> + Updated request</td>
+            </tr>
+            <tr>
+                <td><strong><code>PATCH</code></strong></td>
+                <td><code>/api/listings/requests/{id}/cancel</code></td>
+                <td>Buyer Only</td>
+                <td>Buyer cancels a pending purchase request</td>
+                <td>Path variable: <code>id</code></td>
+                <td><code>200 OK</code> + Cancelled request</td>
+            </tr>
+            <tr>
+                <td><strong><code>POST</code></strong></td>
+                <td><code>/api/listings/conversations/start</code></td>
+                <td>Buyer / Seller</td>
+                <td>Initiates or fetches P2P conversation</td>
+                <td>Query: <code>?listingId=501</code></td>
+                <td><code>201 Created</code> / <code>200 OK</code> + Conversation</td>
+            </tr>
+            <tr>
+                <td><strong><code>GET</code></strong></td>
+                <td><code>/api/listings/conversations/my</code></td>
+                <td>Authenticated</td>
+                <td>Lists user's active chat conversations</td>
+                <td>Injected header: <code>X-User-Id</code></td>
+                <td><code>200 OK</code> + Array of conversations</td>
+            </tr>
+            <tr>
+                <td><strong><code>POST</code></strong></td>
+                <td><code>/api/listings/conversations/{id}/messages</code></td>
+                <td>Participant</td>
+                <td>Sends a chat message in a conversation</td>
+                <td>Body: <code>{message}</code></td>
+                <td><code>201 Created</code> + Message record</td>
+            </tr>
+            <tr>
+                <td><strong><code>GET</code></strong></td>
+                <td><code>/api/listings/conversations/{id}/messages</code></td>
+                <td>Participant</td>
+                <td>Fetches message history for a conversation</td>
+                <td>Path variable: <code>id</code></td>
+                <td><code>200 OK</code> + Message array</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>5.4 Scrap Collection &amp; Giveaways Service Endpoints (:8085)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 10%;">Method</th>
+                <th style="width: 25%;">Gateway Path</th>
+                <th style="width: 14%;">Access Level</th>
+                <th style="width: 21%;">Description</th>
+                <th style="width: 15%;">Key Parameters</th>
+                <th style="width: 15%;">Success Response</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong><code>POST</code></strong></td>
+                <td><code>/api/scrap</code></td>
+                <td>Authenticated</td>
+                <td>Schedules a recyclable scrap pickup request</td>
+                <td>Body: <code>{materialType, description, estimatedQuantity, quantityUnit, pickupLocation, preferredPickupTime}</code></td>
+                <td><code>201 Created</code> + Scrap request</td>
+            </tr>
+            <tr>
+                <td><strong><code>GET</code></strong></td>
+                <td><code>/api/scrap</code></td>
+                <td>Staff / Admin</td>
+                <td>Lists all submitted scrap collection requests</td>
+                <td>None</td>
+                <td><code>200 OK</code> + Array of requests</td>
+            </tr>
+            <tr>
+                <td><strong><code>GET</code></strong></td>
+                <td><code>/api/scrap/{id}</code></td>
+                <td>Authenticated</td>
+                <td>Retrieves specific scrap request details</td>
+                <td>Path variable: <code>id</code></td>
+                <td><code>200 OK</code> + Request details</td>
+            </tr>
+            <tr>
+                <td><strong><code>GET</code></strong></td>
+                <td><code>/api/scrap/user/{userId}</code></td>
+                <td>Owner / Admin</td>
+                <td>Lists scrap requests created by a specific user</td>
+                <td>Path variable: <code>userId</code></td>
+                <td><code>200 OK</code> + Array of requests</td>
+            </tr>
+            <tr>
+                <td><strong><code>GET</code></strong></td>
+                <td><code>/api/scrap/staff/{staffId}</code></td>
+                <td>Staff / Admin</td>
+                <td>Lists requests assigned to a collection staff member</td>
+                <td>Path variable: <code>staffId</code></td>
+                <td><code>200 OK</code> + Array of requests</td>
+            </tr>
+            <tr>
+                <td><strong><code>PATCH</code></strong></td>
+                <td><code>/api/scrap/{id}/assign</code></td>
+                <td>Admin Only</td>
+                <td>Assigns collection staff to a pickup request</td>
+                <td>Body: <code>{assignedStaffId, scheduledPickupTime, notes}</code></td>
+                <td><code>200 OK</code> + Updated request</td>
+            </tr>
+            <tr>
+                <td><strong><code>PATCH</code></strong></td>
+                <td><code>/api/scrap/{id}/status</code></td>
+                <td>Staff / Admin</td>
+                <td>Updates scrap status (<code>WEIGHED</code>, <code>COMPLETED</code>)</td>
+                <td>Query: <code>?status=COMPLETED</code></td>
+                <td><code>200 OK</code> + Updated request</td>
+            </tr>
+            <tr>
+                <td><strong><code>POST</code></strong></td>
+                <td><code>/api/giveaways</code></td>
+                <td>Student / Staff</td>
+                <td>Publishes a zero-cost free giveaway item</td>
+                <td>Body: <code>{title, description, category}</code></td>
+                <td><code>201 Created</code> + Giveaway object</td>
+            </tr>
+            <tr>
+                <td><strong><code>GET</code></strong></td>
+                <td><code>/api/giveaways</code></td>
+                <td>Public / Auth</td>
+                <td>Lists all available free giveaway items</td>
+                <td>None</td>
+                <td><code>200 OK</code> + Array of giveaways</td>
+            </tr>
+            <tr>
+                <td><strong><code>GET</code></strong></td>
+                <td><code>/api/giveaways/{id}</code></td>
+                <td>Public / Auth</td>
+                <td>Fetches a giveaway item by ID</td>
+                <td>Path variable: <code>id</code></td>
+                <td><code>200 OK</code> + Giveaway object</td>
+            </tr>
+            <tr>
+                <td><strong><code>POST</code></strong></td>
+                <td><code>/api/giveaways/{id}/interest</code></td>
+                <td>Authenticated</td>
+                <td>Submits statement of interest for free item</td>
+                <td>Body: <code>{message}</code></td>
+                <td><code>201 Created</code> + Interest object</td>
+            </tr>
+            <tr>
+                <td><strong><code>GET</code></strong></td>
+                <td><code>/api/giveaways/{id}/interests</code></td>
+                <td>Owner Only</td>
+                <td>Owner reviews submitted claims on item</td>
+                <td>Injected header: <code>X-User-Id</code></td>
+                <td><code>200 OK</code> + Array of interests</td>
+            </tr>
+            <tr>
+                <td><strong><code>PATCH</code></strong></td>
+                <td><code>/api/giveaways/{id}/interests/{intId}/accept</code></td>
+                <td>Owner Only</td>
+                <td>Owner accepts recipient; reserves giveaway</td>
+                <td>Path variables: <code>id</code>, <code>intId</code></td>
+                <td><code>200 OK</code> + Accepted interest</td>
+            </tr>
+            <tr>
+                <td><strong><code>POST</code></strong></td>
+                <td><code>/api/giveaways/{id}/messages</code></td>
+                <td>Authenticated</td>
+                <td>Submits public inquiry or message on giveaway</td>
+                <td>Body: <code>{message}</code></td>
+                <td><code>201 Created</code> + Message object</td>
+            </tr>
+            <tr>
+                <td><strong><code>GET</code></strong></td>
+                <td><code>/api/giveaways/{id}/messages</code></td>
+                <td>Authenticated</td>
+                <td>Views public discussion messages on giveaway</td>
+                <td>Path variable: <code>id</code></td>
+                <td><code>200 OK</code> + Message array</td>
+            </tr>
+            <tr>
+                <td><strong><code>DELETE</code></strong></td>
+                <td><code>/api/giveaways/{id}</code></td>
+                <td>Owner Only</td>
+                <td>Cancels / withdraws a giveaway listing</td>
+                <td>Path variable: <code>id</code></td>
+                <td><code>204 No Content</code></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>5.5 Payment &amp; Settlement Service Endpoints (:8086)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 10%;">Method</th>
+                <th style="width: 25%;">Gateway Path</th>
+                <th style="width: 14%;">Access Level</th>
+                <th style="width: 21%;">Description</th>
+                <th style="width: 15%;">Key Parameters</th>
+                <th style="width: 15%;">Success Response</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong><code>POST</code></strong></td>
+                <td><code>/api/payments</code></td>
+                <td>Authenticated Buyer</td>
+                <td>Processes simulated payment with idempotency</td>
+                <td>Body: <code>{amount, paymentMethod, referenceType, referenceId, sellerId, idempotencyKey}</code></td>
+                <td><code>201 Created</code> (or <code>200 OK</code> on replay) + Payment</td>
+            </tr>
+            <tr>
+                <td><strong><code>GET</code></strong></td>
+                <td><code>/api/payments</code></td>
+                <td>Admin Only</td>
+                <td>Audits all recorded transactions</td>
+                <td>Role: <code>ADMIN</code></td>
+                <td><code>200 OK</code> + Transaction list</td>
+            </tr>
+            <tr>
+                <td><strong><code>GET</code></strong></td>
+                <td><code>/api/payments/{id}</code></td>
+                <td>Authenticated</td>
+                <td>Fetches payment record by numeric ID</td>
+                <td>Path variable: <code>id</code></td>
+                <td><code>200 OK</code> + Payment record</td>
+            </tr>
+            <tr>
+                <td><strong><code>GET</code></strong></td>
+                <td><code>/api/payments/reference/{ref}</code></td>
+                <td>Authenticated</td>
+                <td>Fetches transaction by reference code</td>
+                <td>Path variable: <code>ref</code></td>
+                <td><code>200 OK</code> + Payment record</td>
+            </tr>
+            <tr>
+                <td><strong><code>GET</code></strong></td>
+                <td><code>/api/payments/buyer/{buyerId}</code></td>
+                <td>Buyer / Admin</td>
+                <td>Retrieves payment history for a buyer</td>
+                <td>Path variable: <code>buyerId</code></td>
+                <td><code>200 OK</code> + Payment array</td>
+            </tr>
+            <tr>
+                <td><strong><code>GET</code></strong></td>
+                <td><code>/api/payments/seller/{sellerId}</code></td>
+                <td>Seller / Admin</td>
+                <td>Retrieves sales receipt history for a seller</td>
+                <td>Path variable: <code>sellerId</code></td>
+                <td><code>200 OK</code> + Payment array</td>
+            </tr>
+            <tr>
+                <td><strong><code>PATCH</code></strong></td>
+                <td><code>/api/payments/{id}/status</code></td>
+                <td>Admin / System</td>
+                <td>Updates status (simulates refunds / reconciliation)</td>
+                <td>Query: <code>?status=REFUNDED</code></td>
+                <td><code>200 OK</code> + Updated payment</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- SECTION 6: PENDING IMPLEMENTATION & GAPS ANALYSIS -->
+<div class="page-break">
+    <h1>6. Pending Implementation &amp; Gaps Analysis</h1>
+    <p>This section provides an honest, granular audit of what is currently incomplete, missing, or requires production hardening within each service:</p>
+
+    <h2>6.1 vendora-api-gateway</h2>
+    <ul>
+        <li><strong>Missing Rate Limiting:</strong> No Redis or Bucket4j rate-limiting filter is currently active. The gateway does not throttle brute-force login attempts or high-frequency listing queries.</li>
+        <li><strong>Missing Circuit Breakers:</strong> Resilience4j is not configured. If a downstream service (e.g., <code>marketplace-service</code>) crashes or encounters thread starvation, the gateway waits for timeout rather than triggering an immediate fallback response.</li>
+        <li><strong>TLS/SSL Termination:</strong> Runs on plain HTTP (<code>:8080</code>). Needs HTTPS certificate binding for real-world deployment.</li>
+    </ul>
+
+    <h2>6.2 vendora-auth-service</h2>
+    <ul>
+        <li><strong>No Refresh Token Flow:</strong> JWT tokens are issued with a fixed 1-hour expiration. When a token expires, users must re-authenticate with credentials. A secure refresh-token rotation mechanism (HTTP-only cookies) is not implemented.</li>
+        <li><strong>Stateless Token Invalidation / Blacklisting:</strong> When a user logs out, the JWT remains cryptographically valid until its expiration time. A Redis token blacklist or token version counter in <code>vendora_db</code> is needed for immediate revocation.</li>
+        <li><strong>No Password Reset / Forgot Password:</strong> There is no endpoint or email delivery mechanism for OTP-based password resets.</li>
+    </ul>
+
+    <h2>6.3 vendora-user-service</h2>
+    <ul>
+        <li><strong>No Email Verification Workflow:</strong> Newly registered users are immediately set to <code>ACTIVE</code>. A campus verification step (sending a verification code to their <code>@campus.edu</code> email) is not implemented.</li>
+        <li><strong>File Upload for Student ID Cards:</strong> The <code>RepresentativeApplicationRequest</code> accepts a static string URL (<code>studentIdProofUrl</code>). Multipart file upload directly to cloud storage (e.g., AWS S3 or MinIO) is missing.</li>
+        <li><strong>No Avatar / Profile Picture Upload:</strong> Profiles only hold textual metadata.</li>
+    </ul>
+
+    <h2>6.4 vendora-marketplace-service</h2>
+    <ul>
+        <li><strong>No Physical Binary Image Upload:</strong> The <code>ListingRequest</code> expects a pre-hosted image URL string (<code>imageUrl: "https://..."</code>). An image upload endpoint (<code>multipart/form-data</code>) storing to an S3-compatible bucket is pending.</li>
+        <li><strong>No Pagination / Pageable Sorting:</strong> <code>GET /api/listings</code> and <code>/api/listings/search</code> return unfiltered <code>List&lt;ListingResponse&gt;</code>. In a large campus catalog with thousands of books, this will cause memory spikes; Spring Data <code>Pageable</code> (<code>page</code>, <code>size</code>, <code>sort</code>) is missing.</li>
+        <li><strong>Order / Payment Linkage:</strong> When a seller accepts a request (<code>status = ACCEPTED</code>), the transaction is not automatically linked to the Payment Service. The buyer must initiate payment independently without an atomic order state machine.</li>
+    </ul>
+
+    <h2>6.5 vendora-scrap-service</h2>
+    <ul>
+        <li><strong>No Dynamic Material Price Table:</strong> The system tracks quantity and unit (<code>15.5 KG PAPER</code>), but does not calculate automated monetary payouts based on daily scrap rates (e.g., ₹14/kg for newspaper, ₹10/kg for cardboard).</li>
+        <li><strong>No Automated Payment Payout Trigger:</strong> When a scrap request transitions to <code>COMPLETED</code>, it does not automatically generate a payout record in <code>vendora-payment-service</code> to credit the student's UPI ID.</li>
+    </ul>
+
+    <h2>6.6 vendora-payment-service</h2>
+    <ul>
+        <li><strong>Simulation Only (No Third-Party Gateway Integration):</strong> The service validates input and persists payment records, but does not interact with Razorpay, Cashfree, or Stripe webhooks. No real money or sandbox bank transactions are processed.</li>
+        <li><strong>No Escrow / Hold-and-Release Logic:</strong> For P2P book buying, funds are immediately marked <code>SUCCESS</code> rather than held in escrow until the buyer inspects the textbook and enters an OTP confirmation.</li>
+    </ul>
+
+    <h2>6.7 vendora-helpdesk-service (:8084)</h2>
+    <ul>
+        <li><strong>Completely Unimplemented:</strong> The service directory does not exist. Ticket entities, repositories, controllers, and staff assignment logic for campus facility repairs remain to be built.</li>
+    </ul>
+</div>
+<!-- SECTION 7: REMAINING FEATURES -->
+<div class="page-break">
+    <h1>7. Remaining Features to Achieve 100% Project Completion</h1>
+    <p>To transition Vendora from its current backend MVP into a complete, end-to-end commercial-grade campus platform, the following planned modules must be developed:</p>
+
+    <h2>7.1 Second-Hand Book &amp; Academic Courseware Specialization</h2>
+    <p>Currently, books are treated as generic marketplace listings (<code>category: BOOKS</code>). To make Vendora truly campus-specialized:</p>
+    <ol>
+        <li><strong>Academic Taxonomy Schema:</strong> Add fields: <code>isbn</code>, <code>author</code>, <code>edition</code>, <code>academicDepartment</code> (e.g., Computer Science, Mechanical), <code>semester</code> (Sem 1 to 8), and <code>courseCode</code> (e.g., CS-301).</li>
+        <li><strong>OpenLibrary / Google Books API Integration:</strong> When a student enters a 10- or 13-digit ISBN during listing creation, auto-populate the official book title, author, cover thumbnail, and publisher metadata.</li>
+        <li><strong>Condition Grading &amp; Defect Check:</strong> Specific flags: Highlighting extent (None, Light, Heavy), missing pages check, binding condition (Intact, Loose).</li>
+    </ol>
+
+    <h2>7.2 eBook Purchases &amp; Digital Course Notes</h2>
+    <ol>
+        <li><strong>Digital Asset Management:</strong> Allow students and faculty to upload academic notes, lab manuals, and open-source study guides in PDF/EPUB formats.</li>
+        <li><strong>Security &amp; Dynamic Watermarking:</strong> Embed dynamic watermark overlays on downloaded PDF pages (containing the buyer's Student ID and email) to prevent unauthorized file sharing outside the campus.</li>
+        <li><strong>Time-Limited Signed Download URLs:</strong> Deliver digital files via presigned S3 URLs valid for 15 minutes after purchase verification.</li>
+    </ol>
+
+    <h2>7.3 Scrap Management: Automated Valuation &amp; Payout</h2>
+    <ol>
+        <li><strong>Scrap Rate Engine:</strong> Admin-managed price list per campus:
+            <ul>
+                <li>Old Examination Registers / Notebooks: ₹14 / kg</li>
+                <li>Cardboard / Packaging Boxes: ₹9 / kg</li>
+                <li>Iron / Broken Lab Fixtures: ₹28 / kg</li>
+                <li>Electronic Scrap / PC Components: ₹50 / kg</li>
+            </ul>
+        </li>
+        <li><strong>Collector Mobile Weighing Workflow:</strong> Collection staff inputs verified weight on site. App computes total payout: <em>Amount = Actual Weight &times; Rate</em>. System calls <code>vendora-payment-service</code> to trigger an instant UPI payout or credit campus cafeteria points.</li>
+    </ol>
+
+    <h2>7.4 Real Payment Gateway &amp; Escrow Safeguard</h2>
+    <ol>
+        <li><strong>Razorpay / UPI Gateway Integration:</strong> Create order via Razorpay API, capture client payment signatures, and verify webhook callbacks.</li>
+        <li><strong>Escrow Safeguard for High-Value Goods (Cycles / Laptops):</strong> Buyer pays &rarr; Funds locked in Escrow &rarr; Buyer meets Seller on campus &rarr; Buyer verifies item and shares 4-digit Delivery OTP &rarr; Seller submits OTP &rarr; Escrow funds released to Seller.</li>
+    </ol>
+
+    <h2>7.5 Real-Time Notifications &amp; In-App Alerts</h2>
+    <ol>
+        <li><strong>WebSocket / STOMP Broker:</strong> Replace HTTP polling for in-app chat with real-time bidirectional WebSocket messaging.</li>
+        <li><strong>Push &amp; Email Notifications:</strong> Send notifications when a purchase offer is submitted, accepted, or when a scrap collector arrives at the hostel.</li>
+    </ol>
+
+    <h2>7.6 Client Frontend Application</h2>
+    <p>Develop responsive Web and Mobile interfaces (React / Next.js + Tailwind CSS for Web; Flutter for iOS/Android).</p>
+</div>
+
+<!-- SECTION 8: TESTING STATUS & QUALITY VERIFICATION -->
+<div class="page-break">
+    <h1>8. Testing Status &amp; Quality Verification</h1>
+    
+    <h2>8.1 Implemented Test Suites (All Verified Passing)</h2>
+    <p>Vendora contains <strong>59 automated unit tests</strong> across its microservices, built with <strong>JUnit 5</strong>, <strong>Mockito</strong>, and <strong>Spring Boot Test</strong>. All 59 tests execute with zero failures, zero errors, and zero skipped tests.</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 25%;">Microservice</th>
+                <th style="width: 45%;">Test Class</th>
+                <th style="width: 15%; text-align: center;">Tests Run</th>
+                <th style="width: 15%; text-align: center;">Passed</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>API Gateway</td>
+                <td><code>JwtServiceTest</code></td>
+                <td style="text-align: center;">2</td>
+                <td style="text-align: center;"><strong>2</strong></td>
+            </tr>
+            <tr>
+                <td>API Gateway</td>
+                <td><code>VendoraApiGatewayApplicationTests</code></td>
+                <td style="text-align: center;">1</td>
+                <td style="text-align: center;"><strong>1</strong></td>
+            </tr>
+            <tr>
+                <td>Auth Service</td>
+                <td><code>AuthServiceTest</code></td>
+                <td style="text-align: center;">8</td>
+                <td style="text-align: center;"><strong>8</strong></td>
+            </tr>
+            <tr>
+                <td>Eureka Server</td>
+                <td><code>VendoraEurekaServerApplicationTests</code></td>
+                <td style="text-align: center;">1</td>
+                <td style="text-align: center;"><strong>1</strong></td>
+            </tr>
+            <tr>
+                <td>Marketplace Service</td>
+                <td><code>ChatServiceTest</code></td>
+                <td style="text-align: center;">4</td>
+                <td style="text-align: center;"><strong>4</strong></td>
+            </tr>
+            <tr>
+                <td>Marketplace Service</td>
+                <td><code>ListingServiceTest</code></td>
+                <td style="text-align: center;">5</td>
+                <td style="text-align: center;"><strong>5</strong></td>
+            </tr>
+            <tr>
+                <td>Marketplace Service</td>
+                <td><code>MarketplaceRequestServiceTest</code></td>
+                <td style="text-align: center;">4</td>
+                <td style="text-align: center;"><strong>4</strong></td>
+            </tr>
+            <tr>
+                <td>Scrap Service</td>
+                <td><code>ScrapServiceTest</code></td>
+                <td style="text-align: center;">6</td>
+                <td style="text-align: center;"><strong>6</strong></td>
+            </tr>
+            <tr>
+                <td>Scrap Service</td>
+                <td><code>GiveawayServiceTest</code></td>
+                <td style="text-align: center;">5</td>
+                <td style="text-align: center;"><strong>5</strong></td>
+            </tr>
+            <tr>
+                <td>Payment Service</td>
+                <td><code>PaymentServiceTest</code></td>
+                <td style="text-align: center;">5</td>
+                <td style="text-align: center;"><strong>5</strong></td>
+            </tr>
+            <tr>
+                <td>Payment Service</td>
+                <td><code>VendoraPaymentServiceApplicationTests</code></td>
+                <td style="text-align: center;">1</td>
+                <td style="text-align: center;"><strong>1</strong></td>
+            </tr>
+            <tr>
+                <td>User Service</td>
+                <td><code>UserServiceTest</code></td>
+                <td style="text-align: center;">9</td>
+                <td style="text-align: center;"><strong>9</strong></td>
+            </tr>
+            <tr>
+                <td>User Service</td>
+                <td><code>RepresentativeServiceTest</code></td>
+                <td style="text-align: center;">8</td>
+                <td style="text-align: center;"><strong>8</strong></td>
+            </tr>
+            <tr style="background-color: #f1f5f9; font-weight: bold;">
+                <td colspan="2">TOTAL AUTOMATED TESTS</td>
+                <td style="text-align: center;">59</td>
+                <td style="text-align: center; color: #16a34a;">59 (100% Pass)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Detailed Test Coverage Scenarios</h3>
+    <ol>
+        <li><strong><code>UserServiceTest</code> (9 Tests):</strong> User registration with valid attributes; duplicate email rejection (<code>409 Conflict</code>); duplicate registration number rejection (<code>409 Conflict</code>); password encoding verification; get user by ID; user not found (<code>404 Not Found</code>); update profile success; update profile invalid ID; admin status update (<code>ACTIVE</code> &rarr; <code>SUSPENDED</code>).</li>
+        <li><strong><code>RepresentativeServiceTest</code> (8 Tests):</strong> Representative application submission; duplicate application rejection; fetch application status by user ID; user without application handling; admin review approval (<code>APPROVED</code>); admin review rejection (<code>REJECTED</code>); review non-existent application; get all applications.</li>
+        <li><strong><code>AuthServiceTest</code> (8 Tests):</strong> Successful login with correct credentials; incorrect password rejection (<code>401 Unauthorized</code>); unknown user rejection; suspended user login rejection; valid token validation; expired token rejection; corrupted signature rejection; missing Bearer prefix rejection.</li>
+        <li><strong><code>ListingServiceTest</code> (5 Tests):</strong> Create listing; get all available listings; search by keyword; update listing by seller; unauthorized update rejection by non-seller (<code>403 Forbidden</code>).</li>
+        <li><strong><code>MarketplaceRequestServiceTest</code> (4 Tests):</strong> Create purchase offer; buyer cancel offer; seller accept offer; seller reject offer.</li>
+        <li><strong><code>ChatServiceTest</code> (4 Tests):</strong> Start conversation; get user conversations; send chat message; get message history.</li>
+        <li><strong><code>ScrapServiceTest</code> (6 Tests):</strong> Create scrap pickup request; get all requests; get requests by user; admin assign collection staff; staff update status (<code>COMPLETED</code>); non-staff status update rejection (<code>403 Forbidden</code>).</li>
+        <li><strong><code>GiveawayServiceTest</code> (5 Tests):</strong> Publish giveaway item; browse available; express interest; owner accept winner; post public discussion message.</li>
+        <li><strong><code>PaymentServiceTest</code> (5 Tests):</strong> Create simulated payment; idempotency replay validation (identical response, no duplicate DB insertion); get payment by transaction reference; get payments by buyer; status update (<code>REFUNDED</code>).</li>
+        <li><strong><code>JwtServiceTest</code> (2 Tests):</strong> Cryptographic signature generation and claims extraction; expired token rejection.</li>
+    </ol>
+
+    <h2>8.2 Pending Testing Requirements</h2>
+    <ul>
+        <li><strong>Controller-Layer Unit Tests (<code>@WebMvcTest</code>):</strong> Current unit tests focus on service-layer logic with Mockito. MockMvc controller tests should be added to explicitly verify HTTP serialization, <code>@Valid</code> bean validations, and Spring Security filters.</li>
+        <li><strong>Database Integration Tests (<code>@DataJpaTest</code> + Testcontainers):</strong> Execute integration tests against a live containerized MySQL instance to verify Hibernate SQL dialect and foreign key cascading.</li>
+        <li><strong>End-to-End API Automated Pipeline (Newman / Postman):</strong> An automated CLI pipeline executing sequential multi-service scenarios (Register &rarr; Login &rarr; Create Listing &rarr; Submit Request &rarr; Chat &rarr; Pay).</li>
+    </ul>
+</div>
+
+<!-- SECTION 9: PROJECT COMPLETION ROADMAP -->
+<div class="page-break">
+    <h1>9. Project Completion Roadmap</h1>
+    <p>To achieve 100% completion of the Vendora platform, the remaining work is divided into a structured 6-phase implementation roadmap:</p>
+
+    <div class="mermaid-container">
+        <div class="mermaid">
+gantt
+    title Vendora Implementation Roadmap
+    dateFormat YYYY-MM-DD
+    section Phase 1 Hardening
+    File Upload Engine        :a1, 2026-11-17, 4d
+    Gateway Rate Limiting     :a2, after a1, 3d
+    RefreshToken Blacklist    :a3, after a2, 3d
+    section Phase 2 Books
+    ISBN Google Books API     :b1, after a3, 4d
+    Academic Taxonomy         :b2, after b1, 3d
+    eBook PDF Watermarking    :b3, after b2, 4d
+    section Phase 3 Scrap Pay
+    Scrap Pricing Engine      :c1, after b3, 3d
+    Automated Scrap Payout    :c2, after c1, 3d
+    Razorpay PG Integration   :c3, after c2, 5d
+    section Phase 4 Helpdesk
+    Helpdesk Microservice     :d1, after c3, 5d
+    WebSocket Real-Time Chat  :d2, after d1, 4d
+    section Phase 5 UI
+    React Web App MVP         :e1, after d2, 10d
+    Mobile Optimization       :e2, after e1, 4d
+    section Phase 6 Final
+    Docker Compose Multi-Cont :f1, after e2, 3d
+    End-to-End Verification   :f2, after f1, 4d
+        </div>
+    </div>
+
+    <h2>Phase Breakdown &amp; Work Estimates</h2>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 25%;">Phase</th>
+                <th style="width: 45%;">Milestone / Work Item</th>
+                <th style="width: 15%;">Dependencies</th>
+                <th style="width: 15%; text-align: center;">Estimated Effort</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Phase 1: Production Hardening &amp; Media</strong></td>
+                <td>Multipart file upload engine (AWS S3 / MinIO), Gateway Redis rate limiting, Resilience4j circuit breakers, JWT refresh token rotation, and token revocation blacklist.</td>
+                <td>Existing Gateway &amp; Auth</td>
+                <td style="text-align: center;">10 Working Days</td>
+            </tr>
+            <tr>
+                <td><strong>Phase 2: Academic Books &amp; eBook Module</strong></td>
+                <td>Specialized book attributes (<code>isbn</code>, <code>branch</code>, <code>semester</code>), Google Books API metadata auto-fill, PDF study notes upload, dynamic PDF watermarking with Student ID, and signed presigned URLs.</td>
+                <td>S3 storage engine (Phase 1)</td>
+                <td style="text-align: center;">11 Working Days</td>
+            </tr>
+            <tr>
+                <td><strong>Phase 3: Scrap Payout &amp; Real Payment Gateway</strong></td>
+                <td>Scrap material rate pricing table, automated collection payout trigger, Razorpay / Cashfree UPI integration replacing simulation, and marketplace escrow hold-and-release mechanism.</td>
+                <td>Payment &amp; Scrap services</td>
+                <td style="text-align: center;">11 Working Days</td>
+            </tr>
+            <tr>
+                <td><strong>Phase 4: Facilities Helpdesk &amp; Real-Time Comms</strong></td>
+                <td>Creation of <code>vendora-helpdesk-service</code> (:8084), maintenance ticket lifecycle (<code>OPEN</code> &rarr; <code>ASSIGNED</code> &rarr; <code>RESOLVED</code>), and WebSocket / STOMP real-time messaging for P2P chat.</td>
+                <td>Eureka &amp; Gateway</td>
+                <td style="text-align: center;">9 Working Days</td>
+            </tr>
+            <tr>
+                <td><strong>Phase 5: User Interface (Frontend MVP)</strong></td>
+                <td>Modern responsive web frontend (React / Next.js, Tailwind CSS), state management (Zustand / Redux Toolkit), API integration via Axios/Fetch, and JWT session handling.</td>
+                <td>Implemented REST APIs</td>
+                <td style="text-align: center;">14 Working Days</td>
+            </tr>
+            <tr>
+                <td><strong>Phase 6: Containerization &amp; Final Hardening</strong></td>
+                <td><code>docker-compose.yml</code> for unified multi-container local bootstrapping (all 7 microservices + MySQL + Redis), Newman automated integration test runs, and evaluator demonstration script.</td>
+                <td>All services &amp; UI</td>
+                <td style="text-align: center;">7 Working Days</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- SECTION 10: FINAL EVALUATION PREPARATION -->
+<div class="page-break">
+    <h1>10. Final Evaluation Preparation: Technical Justifications &amp; Viva Questions</h1>
+    <p>This section provides technical defenses and comprehensive answers to questions that academic evaluators, technical mentors, or system architecture examiners are likely to ask regarding Vendora.</p>
+
+    <h2>10.1 Key Architectural Decisions &amp; Defenses</h2>
+
+    <div class="callout">
+        <span class="callout-title">Q1: "Why did you build Vendora using a Microservices Architecture instead of a Monolithic Spring Boot application?"</span>
+        <p><strong>Examiner's Concern:</strong> Microservices introduce network overhead, eventual consistency issues, and operational complexity. Was it overkill for a campus platform?</p>
+        <p><strong>Technical Defense:</strong></p>
+        <ol>
+            <li><strong>Independent Lifecycle &amp; Domain Isolation:</strong> In an academic institution, different services experience vastly different traffic profiles. The Marketplace and Chat modules experience intense spikes during the start and end of semesters (book exchange periods), while the User Profile and Scrap modules maintain low, steady traffic. Microservices allow the Marketplace service to scale horizontally without duplicating the entire monolithic heap.</li>
+            <li><strong>Failure Isolation:</strong> If the real-time chat or scrap scheduling service encounters an unhandled exception or memory leak, the core authentication and campus security perimeter (Gateway/Auth/User) remain completely unaffected.</li>
+            <li><strong>Polyglot &amp; Integration Readiness:</strong> External integrations (e.g., IoT smart weighing scales for scrap collection or third-party payment gateways) can be modified, tested, and redeployed within their respective microservices without rebuilding or risking the integrity of user identity and academic credentials.</li>
+        </ol>
+    </div>
+
+    <div class="callout">
+        <span class="callout-title">Q2: "You are using a single shared MySQL database (vendora_db). Isn't a shared database considered an anti-pattern in Microservices?"</span>
+        <p><strong>Examiner's Concern:</strong> Microservices should follow the Database-per-Service pattern. Does sharing <code>vendora_db</code> violate service autonomy?</p>
+        <p><strong>Technical Defense:</strong></p>
+        <ol>
+            <li><strong>Pragmatic Shared Schema for MVP:</strong> In an academic evaluation and early staging environment, provisioning, migrating, and monitoring 5 distinct physical database instances causes unnecessary resource consumption on local development machines.</li>
+            <li><strong>Strict Logical Isolation (Zero Database-Level Coupling):</strong> We enforce the core philosophy of Database-per-Service at the application layer:
+                <ul>
+                    <li><strong>No Cross-Service Repositories:</strong> No service injects a repository belonging to another service (e.g., <code>vendora-marketplace-service</code> contains zero references to <code>UserRepository</code>).</li>
+                    <li><strong>No SQL Joins Across Service Boundaries:</strong> All cross-domain relationships are stored as scalar numeric identifiers (<code>seller_id</code>, <code>buyer_id</code>, <code>listing_id</code>). If the marketplace needs user data, it reads trusted claims passed in HTTP headers or calls the user service via REST.</li>
+                    <li><strong>Seamless Migration Path:</strong> Because there are no physical foreign key constraints or SQL joins between service tables, decomposing <code>vendora_db</code> into 5 separate physical databases (<code>vendora_user_db</code>, <code>vendora_market_db</code>, etc.) requires only changing connection strings in <code>application.properties</code> without rewriting any business logic or SQL queries.</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+    <div class="callout">
+        <span class="callout-title">Q3: "How do you prevent a malicious user from spoofing identity by manually passing X-User-Id: 1 (Admin) in Postman?"</span>
+        <p><strong>Examiner's Concern:</strong> Downstream microservices trust the <code>X-User-Id</code> and <code>X-User-Role</code> headers. Can an attacker simply inject these headers directly?</p>
+        <p><strong>Technical Defense:</strong></p>
+        <ol>
+            <li><strong>Perimeter Sanitization at the Gateway:</strong> The <code>JwtAuthenticationFilter</code> in <code>vendora-api-gateway</code> operates before any request reaches internal routing. It <strong>explicitly removes</strong> any client-supplied <code>X-User-Id</code>, <code>X-User-Email</code>, and <code>X-User-Role</code> headers before inspecting the JWT token:
+<pre><code>headers.remove("X-User-Id");
+headers.remove("X-User-Email");
+headers.remove("X-User-Role");</code></pre>
+            </li>
+            <li><strong>Cryptographic Claim Extraction:</strong> Only after verifying the cryptographic HMAC-SHA256 signature and expiration timestamp does the gateway extract the claims from the tamper-proof JWT payload and inject them into the mutated request stream:
+<pre><code>headers.set("X-User-Id", String.valueOf(userId));
+headers.set("X-User-Email", email);
+headers.set("X-User-Role", role);</code></pre>
+            </li>
+            <li><strong>Internal Network Isolation:</strong> In production, downstream microservices run inside a private virtual network (VPC/Docker network) that is inaccessible from the public internet. The only path into the network is through the Gateway, guaranteeing that no request can reach a downstream service without having its headers scrubbed and verified.</li>
+        </ol>
+    </div>
+
+    <div class="callout">
+        <span class="callout-title">Q4: "Why does vendora-auth-service have no database connection? How does it verify credentials?"</span>
+        <p><strong>Examiner's Concern:</strong> Most authentication microservices connect directly to a user database. Why is Auth stateless here?</p>
+        <p><strong>Technical Defense:</strong></p>
+        <ol>
+            <li><strong>Single Source of Truth for Data Ownership:</strong> <code>vendora-user-service</code> is the exclusive owner of the <code>users</code> table and user credential data. Allowing <code>vendora-auth-service</code> to connect directly to the database would create two separate applications modifying or reading the same table, leading to schema coupling.</li>
+            <li><strong>Feign Client with Internal Security Secret:</strong> <code>vendora-auth-service</code> communicates with <code>vendora-user-service</code> via a Spring Cloud OpenFeign client over a dedicated internal endpoint (<code>/internal/users/auth-details</code>). This endpoint is secured using a shared internal secret (<code>X-Service-Secret</code>), ensuring that only internal platform components can request credential hashes.</li>
+            <li><strong>Stateless Scalability:</strong> Because <code>vendora-auth-service</code> holds no database connections, it is extremely lightweight, boots in seconds, and can be scaled horizontally to handle high volumes of concurrent login and token validation requests without exhausting database connection pools.</li>
+        </ol>
+    </div>
+
+    <div class="callout">
+        <span class="callout-title">Q5: "How does your Payment Service prevent duplicate charges if a student clicks 'Pay' multiple times or encounters a network glitch?"</span>
+        <p><strong>Examiner's Concern:</strong> Network retries can cause duplicate payment records in distributed systems.</p>
+        <p><strong>Technical Defense:</strong></p>
+        <ol>
+            <li><strong>Idempotency Key Mechanism:</strong> The client generates a unique UUID <code>Idempotency-Key</code> (transmitted via HTTP header or payload) for each distinct checkout intent.</li>
+            <li><strong>Pre-Persistence Deduplication:</strong> Before creating a new transaction, <code>PaymentService</code> queries the repository by <code>idempotencyKey</code>:
+                <ul>
+                    <li>If a record with that key already exists, the service <strong>skips new transaction creation</strong> and immediately returns the previously recorded payment details with an HTTP <code>200 OK</code>.</li>
+                    <li>If the key is new, it persists the transaction with a unique transaction reference and returns HTTP <code>201 Created</code>.</li>
+                </ul>
+            </li>
+            <li><strong>Unique Database Constraint:</strong> The <code>idempotency_key</code> column has a database-level <code>UNIQUE</code> constraint, providing an absolute guarantee against race conditions even under concurrent duplicate HTTP requests.</li>
+        </ol>
+    </div>
+
+    <div class="callout">
+        <span class="callout-title">Q6: "What happens if the Eureka Server crashes? Does the entire platform stop functioning?"</span>
+        <p><strong>Examiner's Concern:</strong> Is the discovery server a single point of failure (SPOF)?</p>
+        <p><strong>Technical Defense:</strong></p>
+        <ol>
+            <li><strong>Client-Side Cache Resilience:</strong> Spring Cloud Netflix Eureka clients (including the API Gateway) cache the service registry locally in memory. If Eureka crashes, the API Gateway continues routing traffic to known instances using its local registry cache until instances change.</li>
+            <li><strong>Heartbeat &amp; Self-Preservation:</strong> Eureka operates in "Self-Preservation Mode." If network jitter occurs, it does not prematurely deregister instances.</li>
+            <li><strong>High Availability Production Setup:</strong> In production, Eureka is deployed in a peer-aware, multi-node clustered configuration across availability zones, ensuring zero downtime if a single node fails.</li>
+        </ol>
+    </div>
+
+    <h2>10.2 Evaluation Demonstration Guide: Step-by-Step Viva Demo</h2>
+    <p>When presenting the live system to evaluators, execute the following sequence to showcase the complete architectural lifecycle:</p>
+    <ol>
+        <li><strong>Service Registration Verification:</strong> Open browser at <code>http://localhost:8761</code>. Show the Eureka dashboard displaying all active microservices: <code>VENDORA-API-GATEWAY</code>, <code>VENDORA-AUTH-SERVICE</code>, <code>VENDORA-USER-SERVICE</code>, <code>VENDORA-MARKETPLACE-SERVICE</code>, <code>VENDORA-SCRAP-SERVICE</code>, and <code>VENDORA-PAYMENT-SERVICE</code>.</li>
+        <li><strong>Centralized Swagger Documentation:</strong> Open <code>http://localhost:8080/swagger-ui/index.html</code>. Demonstrate the dropdown selector aggregating API contracts from all 5 business services through the single gateway entry point.</li>
+        <li><strong>Public User Registration:</strong> Execute <code>POST http://localhost:8080/api/registration/register</code> with student details. Show that a <code>201 Created</code> response is returned and the password is stored as a BCrypt hash in MySQL (<code>vendora_db.users</code>).</li>
+        <li><strong>Authentication &amp; Token Issuance:</strong> Execute <code>POST http://localhost:8080/api/auth/login</code>. Show the returned JWT token, user ID, email, role (<code>STUDENT</code>), and expiration duration.</li>
+        <li><strong>Perimeter Security &amp; Anti-Spoofing Demonstration:</strong>
+            <ul>
+                <li>Call a protected endpoint (e.g., <code>POST http://localhost:8080/api/listings</code>) <strong>without</strong> a token &rarr; Show immediate <code>401 Unauthorized</code> response generated by the Gateway filter.</li>
+                <li>Call the same endpoint with an invalid/tampered token &rarr; Show <code>401 Unauthorized</code> with signature failure message.</li>
+                <li>Call with a valid Bearer token and intentionally inject a false header <code>X-User-Id: 999</code> &rarr; Show that the created listing in MySQL correctly attributes ownership to the user ID verified in the token, proving that the gateway stripped the spoofed header.</li>
+            </ul>
+        </li>
+        <li><strong>Peer-to-Peer Marketplace Workflow:</strong>
+            <ul>
+                <li>User A posts an engineering textbook (<code>POST /api/listings</code>).</li>
+                <li>User B searches for it (<code>GET /api/listings/search?keyword=...</code>).</li>
+                <li>User B submits a purchase request (<code>POST /api/listings/{id}/requests</code>).</li>
+                <li>User A accepts the request (<code>PATCH .../status?status=ACCEPTED</code>).</li>
+                <li>Both users initiate a chat conversation and exchange messages (<code>POST /api/listings/conversations/...</code>).</li>
+            </ul>
+        </li>
+        <li><strong>Scrap Collection &amp; Pickup Lifecycle:</strong>
+            <ul>
+                <li>User schedules paper/e-waste pickup (<code>POST /api/scrap</code>).</li>
+                <li>Admin assigns collection staff member (<code>PATCH /api/scrap/{id}/assign</code>).</li>
+                <li>Collector updates status to <code>WEIGHED</code> and <code>COMPLETED</code>.</li>
+            </ul>
+        </li>
+        <li><strong>Idempotent Settlement Demonstration:</strong>
+            <ul>
+                <li>Execute <code>POST http://localhost:8080/api/payments</code> with an <code>Idempotency-Key</code> &rarr; Returns <code>201 Created</code> and transaction reference.</li>
+                <li>Resend the exact same request &rarr; Returns <code>200 OK</code> with the identical transaction reference and no duplicate database record.</li>
+            </ul>
+        </li>
+        <li><strong>Automated Test Results:</strong> Run <code>mvn test</code> in the terminal to display the 59 passing unit tests with 0 failures, proving baseline code quality.</li>
+    </ol>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+var e=function(e){return e.DATA=`DATA`,e.EXECUTION=`EXECUTION`,e}({}),t=function(e){return e.RED=`RED`,e.YELLOW=`YELLOW`,e.GREEN=`GREEN`,e}({}),n=function(e){return e.Compliant=`compliant`,e.NonCompliant=`non-compliant`,e.OverCompliant=`over-compliant`,e}({}),r=function(e){return e.ISSUE=`ISSUE`,e.SECURITY_HOTSPOT=`SECURITY_HOTSPOT`,e}({}),i=function(e){return e.Github=`github`,e.Gitlab=`gitlab`,e.Scim=`SCIM`,e}({});export{i as a,t as i,r as n,e as r,n as t};

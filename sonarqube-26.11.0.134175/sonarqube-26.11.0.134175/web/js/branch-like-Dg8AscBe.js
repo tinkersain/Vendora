@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{a as e}from"./rolldown-runtime-LzpV0vpq.js";import{t}from"./lodash-CwL9oH6p.js";import{a as n}from"./branch-like-DEmng3IP.js";var r=e(t());function i(e){return(0,r.orderBy)(e,[e=>e.isMain,e=>e.name],[`desc`,`asc`])}function a(e){return`${e.key} – ${e.title}`}function o(e){return n(e)?a(e):e.name}function s(e){return n(e)?`pull-request-${e.key}`:`branch-${e.name}`}function c(e,t){if(e)return{isMain:!1,name:e};if(t)return{base:``,branch:``,key:t,title:``}}export{i,o as n,s as r,c as t};

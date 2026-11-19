@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{t as e}from"./error-BSkW5sKm.js";import{M as t,f as n,p as r}from"./request-iI6TN18u.js";function i(e){return t(`/api/projects/search`,e)}function a(t){return n(`/api/projects/bulk_delete`,t).catch(e)}function o(t){return n(`/api/projects/delete`,{project:t}).catch(e)}function s(t){return n(`/api/views/delete`,{key:t}).catch(e)}function c(t){return r(`/api/projects/create`,t).catch(e)}function l(t){return n(`/api/projects/update_default_visibility`,{projectVisibility:t}).catch(e)}export{o as a,s as i,l as n,i as o,c as r,a as t};

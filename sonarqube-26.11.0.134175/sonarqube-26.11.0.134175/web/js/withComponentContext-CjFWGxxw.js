@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{a as e}from"./rolldown-runtime-LzpV0vpq.js";import{C as t,w as n}from"./vendor-BinpZ4gA.js";import{C as r}from"./withComponentContext-OQ8dvM8Q.js";var i=e(n()),a=e(t());function o(e){return function(t){let{key:n,name:o,qualifier:s,configuration:c}=(0,i.useContext)(r).component??{};return(0,a.jsx)(e,{...t,component:{key:n,name:o,qualifier:s,configuration:c}})}}export{o as t};

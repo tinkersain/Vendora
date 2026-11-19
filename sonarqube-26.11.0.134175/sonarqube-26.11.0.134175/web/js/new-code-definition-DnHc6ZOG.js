@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+var e=function(e){return e.NumberOfDays=`number_of_days`,e.PreviousVersion=`previous_version`,e.SpecificDate=`specific_date`,e.SpecificVersion=`specific_version`,e}({});export{e as t};

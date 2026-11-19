@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{a as e}from"./rolldown-runtime-LzpV0vpq.js";import{nr as t}from"./echoes-DapxbwKS.js";import{C as n}from"./vendor-BinpZ4gA.js";var r=e(n()),i={year:`numeric`,month:`short`,day:`2-digit`},a={year:`numeric`,month:`long`,day:`numeric`};function o(e){let{children:n,date:o,long:s,useUtc:c=!1}=e,l={...s?a:i,timeZone:c?`utc`:void 0};return(0,r.jsx)(t,{value:o,...l,"data-component":`date-formatter`,children:n?e=>(0,r.jsx)(r.Fragment,{children:n(e)}):void 0})}export{a as n,o as t};

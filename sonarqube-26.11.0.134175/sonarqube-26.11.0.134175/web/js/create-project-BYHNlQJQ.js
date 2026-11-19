@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+var e=`/projects`,t=function(e){return e.Manual=`manual`,e.AzureDevOps=`azure`,e.BitbucketServer=`bitbucket`,e.BitbucketCloud=`bitbucketcloud`,e.GitHub=`github`,e.GitLab=`gitlab`,e}({});export{e as n,t};

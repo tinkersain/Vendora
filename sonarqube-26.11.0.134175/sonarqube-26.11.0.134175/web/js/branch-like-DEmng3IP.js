@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+function e(e,i=!1){return t(e)&&(i||!n(e))?{branch:e.name}:r(e)?{pullRequest:e.key}:{}}function t(e){return e!==void 0&&e.isMain!==void 0}function n(e){return t(e)&&e.isMain}function r(e){return e!==void 0&&e.key!==void 0}function i(e){return r(e)?a(e):e.name}function a(e){return`${e.key} – ${e.title}`}export{r as a,n as i,e as n,t as r,i as t};

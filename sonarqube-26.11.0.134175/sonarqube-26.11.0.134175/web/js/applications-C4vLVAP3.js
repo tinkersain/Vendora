@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{E as e,f as t,i as n}from"./common-BX1tfZCq.js";import{t as r}from"./useMutation-DBqCzZE4.js";import{h as i,n as a}from"./measures-Bhjc5q0j.js";import{i as o,n as s}from"./application-3H-lDaK2.js";var c=n(e=>t({queryKey:[`application`,`leak`,e],queryFn:()=>o(e)}));function l(){let t=e();return r({mutationFn:e=>s(e),onSuccess:(e,n)=>{a(n,t),i.remove(n)}})}export{l as n,c as t};

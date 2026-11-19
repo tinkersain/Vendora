@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+var e=function(e){return e.Bundled=`BUNDLED`,e.External=`EXTERNAL`,e}({}),t=function(e){return e.Accepted=`ACCEPTED`,e.NotAccepted=`NOT_ACCEPTED`,e.Required=`REQUIRED`,e}({});function n(e){return e.release!==void 0}function r(e){return i(e)&&e.updatedAt!==void 0}function i(e){return e.version!==void 0}export{r as i,t as n,n as r,e as t};

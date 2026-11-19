@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{a as e}from"./rolldown-runtime-LzpV0vpq.js";import{C as t}from"./vendor-BinpZ4gA.js";import{b as n}from"./request-iI6TN18u.js";import{a as r}from"./clipboard-CkE9df5H.js";import{t as i}from"./Tooltip-RxdZQO71.js";var a=e(r()),o=e(t());function s({className:e,qualifier:t,visibility:r}){return(0,o.jsx)(i,{content:n(`visibility`,r,`description`,t),"data-component":`privacy-badge-container`,children:(0,o.jsx)(`div`,{className:(0,a.default)(`badge`,e),children:n(`visibility`,r)})})}export{s as t};

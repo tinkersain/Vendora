@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{a as e}from"./rolldown-runtime-LzpV0vpq.js";import{C as t,w as n}from"./vendor-BinpZ4gA.js";import{t as r}from"./utils-BG4DgPuD.js";import{t as i}from"./IndexationContext-DkaG0LWV.js";var a=e(n()),o=e(t());function s(e){return class extends a.PureComponent{static displayName=r(e,`withIndexationContext`);render(){return(0,o.jsx)(i.Consumer,{children:t=>t?(0,o.jsx)(e,{indexationContext:t,...this.props}):null})}}}export{s as t};

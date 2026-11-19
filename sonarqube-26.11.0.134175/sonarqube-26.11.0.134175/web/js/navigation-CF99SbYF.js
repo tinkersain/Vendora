@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{t as e}from"./error-BSkW5sKm.js";import{M as t}from"./request-iI6TN18u.js";function n(e){return t(`/api/navigation/component`,e)}function r(e){return n(e).then(({id:e})=>e)}function i(){return t(`/api/navigation/marketplace`).catch(e)}function a(){return t(`/api/navigation/settings`).catch(e)}function o(){return t(`/api/navigation/global`,void 0,{bypassRedirect:!0})}export{a,i,r as n,o as r,n as t};

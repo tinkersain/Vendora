@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="apple-touch-icon" href="WEB_CONTEXT/apple-touch-icon.png" />
+    <link rel="icon" type="image/x-icon" href="WEB_CONTEXT/favicon.ico" />
+    <meta name="application-name" content="SonarQube" />
+    <meta name="msapplication-TileColor" content="#FFFFFF" />
+    <meta name="msapplication-TileImage" content="WEB_CONTEXT/mstile-512x512.png" />
+    <title>%INSTANCE%</title>
+    <script>
+      window.__assetsPath = function (filename) {
+        return 'WEB_CONTEXT/' + filename;
+      };
+
+      let themeMode = 'system';
+      try {
+        const storedThemeMode = localStorage.getItem('sonarqube.theme_mode');
+        themeMode = storedThemeMode ? JSON.parse(storedThemeMode) : themeMode;
+      } catch {
+        // noop
+      }
+      const useDarkTheme =
+        themeMode === 'dark-theme' ||
+        (themeMode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      if (useDarkTheme) {
+        document.documentElement.dataset.echoesTheme = 'dark';
+      }
+    </script>
+    <script type="module" crossorigin src="WEB_CONTEXT/js/main-tCE2kD1s.js"></script>
+    <link rel="modulepreload" crossorigin href="WEB_CONTEXT/js/rolldown-runtime-LzpV0vpq.js">
+    <link rel="modulepreload" crossorigin href="WEB_CONTEXT/js/vendor-BinpZ4gA.js">
+    <link rel="modulepreload" crossorigin href="WEB_CONTEXT/js/echoes-DapxbwKS.js">
+    <link rel="modulepreload" crossorigin href="WEB_CONTEXT/js/lodash-CwL9oH6p.js">
+    <link rel="modulepreload" crossorigin href="WEB_CONTEXT/js/messages-B7u-5I47.js">
+    <link rel="modulepreload" crossorigin href="WEB_CONTEXT/js/request-iI6TN18u.js">
+    <link rel="modulepreload" crossorigin href="WEB_CONTEXT/js/preload-helper-CjoLqYmA.js">
+    <link rel="modulepreload" crossorigin href="WEB_CONTEXT/js/datefns-CyM72GNA.js">
+    <link rel="modulepreload" crossorigin href="WEB_CONTEXT/js/system-3XJwhDya.js">
+    <link rel="modulepreload" crossorigin href="WEB_CONTEXT/js/error-BSkW5sKm.js">
+    <link rel="modulepreload" crossorigin href="WEB_CONTEXT/js/axios-clients-Dy_X9zrJ.js">
+    <link rel="modulepreload" crossorigin href="WEB_CONTEXT/js/common-BX1tfZCq.js">
+    <link rel="modulepreload" crossorigin href="WEB_CONTEXT/js/useQueries-e3ESnr4z.js">
+    <link rel="modulepreload" crossorigin href="WEB_CONTEXT/js/src-C6Q3q9Le.js">
+    <link rel="modulepreload" crossorigin href="WEB_CONTEXT/js/navigation-CF99SbYF.js">
+    <link rel="modulepreload" crossorigin href="WEB_CONTEXT/js/users-BIoueIkf.js">
+    <link rel="modulepreload" crossorigin href="WEB_CONTEXT/js/extensionsHandler-BEZCTq9T.js">
+    <link rel="modulepreload" crossorigin href="WEB_CONTEXT/js/features-yElEhTvK.js">
+    <link rel="stylesheet" crossorigin href="WEB_CONTEXT/css/echoes-C3fvD2WX.css">
+    <link rel="stylesheet" crossorigin href="WEB_CONTEXT/css/main-BxOby84X.css">
+    <link rel="stylesheet" crossorigin href="WEB_CONTEXT/css/style-Chw94eNX.css">
+  </head>
+
+  <body>
+    <div
+      id="content"
+      data-base-url="WEB_CONTEXT"
+      data-server-status="%SERVER_STATUS%"
+      data-instance="%INSTANCE%"
+      data-official="%OFFICIAL%"
+    >
+      <div class="global-loading">
+        <i class="global-loading-spinner"></i>
+        <span aria-live="polite" class="global-loading-text">Loading...</span>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+var e=function(e){return e.Blocker=`BLOCKER`,e.Critical=`CRITICAL`,e.Major=`MAJOR`,e.Minor=`MINOR`,e.Info=`INFO`,e}({}),t=function(e){return e.Open=`OPEN`,e.Fixed=`FIXED`,e.Confirmed=`CONFIRMED`,e.Accepted=`ACCEPTED`,e.FalsePositive=`FALSE_POSITIVE`,e}({}),n=[t.Open,t.Confirmed,t.Accepted,t.FalsePositive],r=function(e){return e.Snooze=`defer`,e.UnConfirm=`unconfirm`,e.Reopen=`reopen`,e.Accept=`accept`,e.FalsePositive=`falsepositive`,e.Confirm=`confirm`,e.Resolve=`resolve`,e.WontFix=`wontfix`,e}({});export{e as n,r,n as t};

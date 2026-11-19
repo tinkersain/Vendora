@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{a as e}from"./rolldown-runtime-LzpV0vpq.js";import{w as t}from"./vendor-BinpZ4gA.js";import{t as n}from"./CurrentUserContext-BuDtFrm1.js";import{t as r}from"./users-Buyi3At1.js";var i=e(t());function a(){let{currentUser:e}=(0,i.useContext)(n);return r(e)?{currentUser:e,isLoggedIn:!0}:{currentUser:e,isLoggedIn:!1}}export{a as t};

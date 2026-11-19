@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{a as e}from"./rolldown-runtime-LzpV0vpq.js";import{w as t}from"./vendor-BinpZ4gA.js";import{I as n}from"./request-iI6TN18u.js";import{t as r}from"./lodash-CwL9oH6p.js";var i=e(r()),a=e(t()),o=a.createContext({updateCurrentUser:i.noop}),s=a.createContext({currentUser:{isLoggedIn:!1,dismissedNotices:{}},updateCurrentUserHomepage:i.noop}),c=a.createContext({updateDismissedNotices:i.noop});function l(){return(0,a.useContext)(s)}function u(){let{currentUser:e}=l();return e.isLoggedIn||n(),e}export{l as a,u as i,o as n,c as r,s as t};

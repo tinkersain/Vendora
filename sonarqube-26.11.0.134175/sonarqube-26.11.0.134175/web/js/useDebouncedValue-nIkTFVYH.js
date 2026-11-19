@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{a as e}from"./rolldown-runtime-LzpV0vpq.js";import{w as t}from"./vendor-BinpZ4gA.js";var n=e(t()),r=300;function i(){let e=(0,n.useRef)(void 0),[t,i]=(0,n.useState)(``),[a,o]=(0,n.useState)(``);return[t,a,(0,n.useCallback)(t=>{i(t),e.current&&clearTimeout(e.current),e.current=setTimeout(()=>{o(t)},r)},[])]}export{i as t};

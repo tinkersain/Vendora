@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{d as e,n as t}from"./request-iI6TN18u.js";import{f as n,i as r}from"./common-BX1tfZCq.js";function i(n){return t(`/api/sources/raw`,n).then(e)}var a=6e4;function o(e,t){return[`sources`,`details`,e,t]}var s=r(e=>n({queryKey:o(e.key,e),queryFn:()=>i(e),staleTime:a}));export{s as t};

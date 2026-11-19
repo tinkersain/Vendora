@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{a as e}from"./rolldown-runtime-LzpV0vpq.js";import{Tn as t,or as n,qt as r}from"./echoes-DapxbwKS.js";import{C as i}from"./vendor-BinpZ4gA.js";var a=e(i());function o(){return(0,a.jsx)(t,{variety:r.Warning,"data-component":`deprecated-badge`,children:(0,a.jsx)(n,{id:`deprecated`})})}export{o as t};

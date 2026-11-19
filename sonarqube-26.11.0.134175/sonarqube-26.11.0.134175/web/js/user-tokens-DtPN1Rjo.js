@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{t as e}from"./error-BSkW5sKm.js";import{M as t,f as n,p as r}from"./request-iI6TN18u.js";function i(n){return t(`/api/user_tokens/search`,{login:n}).then(e=>e.userTokens,e)}function a(t){return r(`/api/user_tokens/generate`,t).catch(e)}function o(t){return n(`/api/user_tokens/revoke`,t).catch(e)}export{i as n,o as r,a as t};

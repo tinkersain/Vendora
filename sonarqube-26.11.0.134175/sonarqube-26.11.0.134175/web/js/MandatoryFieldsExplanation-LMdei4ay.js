@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{a as e}from"./rolldown-runtime-LzpV0vpq.js";import{or as t,tn as n}from"./echoes-DapxbwKS.js";import{C as r}from"./vendor-BinpZ4gA.js";import{Cn as i}from"./design-system-BNR1FPix.js";var a=e(r());function o({className:e}){return(0,a.jsx)(n,{"aria-hidden":!0,className:e,isSubtle:!0,"data-component":`mandatory-fields-explanation`,children:(0,a.jsx)(t,{id:`fields_marked_with_x_required`,values:{star:(0,a.jsx)(i,{className:`sw:m-0`})}})})}export{o as t};

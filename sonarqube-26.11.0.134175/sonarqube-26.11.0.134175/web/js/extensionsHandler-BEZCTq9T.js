@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{U as e}from"./request-iI6TN18u.js";var t=`sq-web-analytics`,n={};function r(e,t,r=!1,i=!1){n[e]={providesCSSFile:r,receivesExtensionPageTemplate:i,start:t}}function i(e){r(t,e)}function a(){e().registerExtension=r}function o(){e().setWebAnalyticsPageChangeHandler=i}function s(e){return n[e]}function c(){return n[t]?.start}export{o as i,c as n,a as r,s as t};

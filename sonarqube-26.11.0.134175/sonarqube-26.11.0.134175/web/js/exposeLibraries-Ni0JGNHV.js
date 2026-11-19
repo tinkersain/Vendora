@@ -1,0 +1,2 @@
+/*! licenses: /vendor.LICENSE.txt */
+import{t as e}from"./error-BSkW5sKm.js";import{M as t,a as n,b as r,c as i,f as a,h as o,m as s,n as c,p as l,s as u,x as d}from"./request-iI6TN18u.js";import{Kr as f}from"./design-system-BNR1FPix.js";var p=()=>{let p=window;p.SonarRequest={request:o,get:c,getJSON:t,getText:n,omitNil:u,parseError:i,post:a,postJSON:l,postJSONBody:s,throwGlobalError:e,addGlobalSuccessMessage:f},p.t=r,p.tp=d};export{p as default};
